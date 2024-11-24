@@ -1,0 +1,10 @@
+:root {
+  font-family: "Karla", sans-serif;
+  line-height: 1;
+  font-weight: 400;
+  background-color: #fff;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
