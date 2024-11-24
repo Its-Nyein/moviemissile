@@ -3,8 +3,8 @@ import MovieDBLogo from "../assets/moviedb.svg";
 
 const Navbar = () => {
   return (
-    <nav className="bg-whit text-[#353535] py-4 shadow-md">
-      <div className="container mx-auto max-w-7xl flex items-center justify-between">
+    <nav className="bg-white text-[#353535] py-4 shadow-md">
+      <div className="container mx-auto max-w-7xl flex items-center justify-between px-4">
         <div className="flex items-center space-x-10">
           <Link to="/" className="text-xl font-bold">
             <span>Moviemissile</span>
