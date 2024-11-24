@@ -5,7 +5,7 @@ const Footer = () => {
         The movie data are provided by{" "}
         <a
           href="https://www.themoviedb.org/"
-          className="hover:text-[#0d6efd] font-bold"
+          className="hover:text-[#0d6efd] font-semibold opacity-80"
         >
           The Movie DB
         </a>
