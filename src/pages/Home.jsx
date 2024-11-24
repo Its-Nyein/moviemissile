@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
 import { fetchAllMovies } from "../services/fetcher";
 import MovieCard from "../components/MovieCard";
+import LoadingSpinner from "../UI/LoadingSpinner";
 
 const Home = () => {
   const [data, setData] = useState([]);
   const [timeWindow, setTimeWindow] = useState("day");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     fetchAllMovies(timeWindow)
       .then((res) => setData(res))
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
   }, [timeWindow]);
 
   return (
@@ -42,10 +46,11 @@ const Home = () => {
         </div>
       </div>
 
+      {loading && <LoadingSpinner />}
+
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-4 align-middle my-8">
-        {data.map((item) => (
-          <MovieCard key={item.id} item={item} />
-        ))}
+        {!loading &&
+          data.map((item) => <MovieCard key={item.id} item={item} />)}
       </div>
     </div>
   );
