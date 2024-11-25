@@ -1,26 +1,52 @@
 import { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchMoviesDetails, imagePath } from "../services/fetcher";
+import {
+  fetchMoviesCast,
+  fetchMoviesDetails,
+  imagePath,
+} from "../services/fetcher";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import { SlCalender } from "react-icons/sl";
 import { FaRegClock } from "react-icons/fa";
 import { FaStar } from "react-icons/fa6";
 import { formatNumber } from "../helpers/helpers";
 import { CiBookmarkMinus, CiBookmarkPlus } from "react-icons/ci";
+import MoviesCast from "./movies/MoviesCast";
 
 const DetailsPage = () => {
   const { type, id } = useParams();
   const [details, setDetails] = useState([]);
+  const [casts, setCasts] = useState({});
   const [loading, setLoading] = useState(false);
 
+  // useEffect(() => {
+  //   setLoading(true);
+  //   fetchMoviesDetails(type, id)
+  //     .then((res) => setDetails(res))
+  //     .catch((err) => console.log(err))
+  //     .finally(() => {
+  //       setLoading(false);
+  //     });
+  // }, [type, id]);
+
   useEffect(() => {
-    setLoading(true);
-    fetchMoviesDetails(type, id)
-      .then((res) => setDetails(res))
-      .catch((err) => console.log(err))
-      .finally(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const [detailsData, creditsData] = await Promise.all([
+          fetchMoviesDetails(type, id),
+          fetchMoviesCast(type, id),
+        ]);
+
+        setDetails(detailsData);
+        setCasts(creditsData);
+      } catch (error) {
+        console.log(error);
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+    fetchData();
   }, [type, id]);
 
   if (loading) {
@@ -118,6 +144,10 @@ const DetailsPage = () => {
         <h2 className="text-lg font-bold text-[#353535] mb-2">Overview</h2>
         <span>{details?.overview}</span>
       </div>
+
+      {casts.cast?.length > 0 && (
+        <MoviesCast casts={casts?.cast} crews={casts?.crew} movie={details} />
+      )}
     </Fragment>
   );
 };
