@@ -13,3 +13,9 @@ export const fetchAllMovies = async (timeWindow = "day") => {
 
   return data?.results;
 };
+
+export const fetchMoviesDetails = async (type, id) => {
+  const res = await axios.get(`${baseUrl}/${type}/${id}?api_key=${apiKey}`);
+
+  return res?.data;
+};
