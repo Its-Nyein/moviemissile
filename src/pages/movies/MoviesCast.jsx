@@ -30,7 +30,7 @@ const MoviesCast = ({ casts, crews, movie }) => {
     <div className="container mx-auto max-w-7xl grid grid-cols-12 px-4 my-10">
       <div className="col-span-12 md:col-span-8 lg:col-span-9">
         <h2 className="text-lg font-semibold text-[#353535] mb-3">Casts</h2>
-        <div className="flex overflow-x-scroll overflow-y-hidden gap-3">
+        <div className="flex overflow-x-scroll overflow-y-hidden gap-3 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-white dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
           {casts?.slice(0, visibleCasts).map((cast) => (
             <div
               key={cast.id}
@@ -58,8 +58,8 @@ const MoviesCast = ({ casts, crews, movie }) => {
       <div className="col-span-12 md:col-span-4 lg:col-span-3 md:ml-4">
         <div className="mb-4">
           <p className="text-lg font-semibold text-[#353535] mb-3">Directors</p>
-          {directors?.map((director) => (
-            <div key={director.id} className="flex gap-2">
+          {directors?.slice(0, 3).map((director) => (
+            <div key={director.id} className="flex gap-2 mb-2">
               <img
                 src={generatePoster(director.profile_path)}
                 alt="Dire Profile"

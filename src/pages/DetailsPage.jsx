@@ -169,7 +169,7 @@ const DetailsPage = () => {
           <h2 className="text-lg font-semibold text-[#353535] mb-3">
             Recommendations
           </h2>
-          <div className="flex overflow-x-scroll gap-3">
+          <div className="flex overflow-x-scroll gap-3 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-white dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
             {recommendations?.map((recommendation) => (
               <div
                 key={recommendation.id}
