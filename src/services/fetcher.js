@@ -43,3 +43,11 @@ export const fetchMoviesRecommendations = async (type, id) => {
 
   return res.data?.results;
 };
+
+export const fetchMoviesDiscovers = async (page, sortBy) => {
+  const res = await axios.get(
+    `${baseUrl}/discover/movie?api_key=${apiKey}&page=${page}&sort_by=${sortBy}`
+  );
+
+  return res?.data;
+};

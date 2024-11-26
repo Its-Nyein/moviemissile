@@ -60,8 +60,6 @@ const DetailsPage = () => {
     fetchData();
   }, [type, id]);
 
-  console.log(recommendations);
-
   if (loading) {
     return <LoadingSpinner />;
   }
