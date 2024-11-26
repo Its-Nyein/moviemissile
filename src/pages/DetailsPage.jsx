@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import {
   fetchMoviesCast,
   fetchMoviesDetails,
+  fetchMoviesReviews,
   imagePath,
 } from "../services/fetcher";
 import LoadingSpinner from "../UI/LoadingSpinner";
@@ -12,11 +13,13 @@ import { FaStar } from "react-icons/fa6";
 import { formatNumber } from "../helpers/helpers";
 import { CiBookmarkMinus, CiBookmarkPlus } from "react-icons/ci";
 import MoviesCast from "./movies/MoviesCast";
+import MoviesReviews from "./movies/MoviesReviews";
 
 const DetailsPage = () => {
   const { type, id } = useParams();
   const [details, setDetails] = useState([]);
   const [casts, setCasts] = useState({});
+  const [reviews, setReviews] = useState({});
   const [loading, setLoading] = useState(false);
 
   // useEffect(() => {
@@ -33,13 +36,15 @@ const DetailsPage = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const [detailsData, creditsData] = await Promise.all([
+        const [detailsData, creditsData, reviewsData] = await Promise.all([
           fetchMoviesDetails(type, id),
           fetchMoviesCast(type, id),
+          fetchMoviesReviews(type, id),
         ]);
 
         setDetails(detailsData);
         setCasts(creditsData);
+        setReviews(reviewsData);
       } catch (error) {
         console.log(error);
       } finally {
@@ -136,18 +141,20 @@ const DetailsPage = () => {
 
           <div className="mt-8 hidden lg:block">
             <h2 className="text-lg font-bold text-[#353535] mb-2">Overview</h2>
-            <span>{details?.overview}</span>
+            <span style={{ lineHeight: "1.25rem" }}>{details?.overview}</span>
           </div>
         </div>
       </div>
       <div className="mt-8 lg:hidden container mx-auto max-w-7xl px-4 my-5 grid">
         <h2 className="text-lg font-bold text-[#353535] mb-2">Overview</h2>
-        <span>{details?.overview}</span>
+        <span style={{ lineHeight: "1.25rem" }}>{details?.overview}</span>
       </div>
 
       {casts.cast?.length > 0 && (
         <MoviesCast casts={casts?.cast} crews={casts?.crew} movie={details} />
       )}
+
+      {reviews?.length > 0 && <MoviesReviews reviews={reviews} />}
     </Fragment>
   );
 };

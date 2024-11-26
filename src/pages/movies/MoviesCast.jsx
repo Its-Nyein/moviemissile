@@ -16,9 +16,15 @@ const MoviesCast = ({ casts, crews, movie }) => {
   const remainingCasts = casts?.length - visibleCasts;
 
   const directors = crews?.filter((crew) => crew.job === "Director");
-  const budget = movie?.budget === 0 ? "-" : "$" + formatNumber(movie?.budget);
+  const budget =
+    movie?.budget != null && movie?.budget !== 0 && movie?.type === "movie"
+      ? "$" + formatNumber(movie?.budget)
+      : "-";
+
   const revenue =
-    movie?.revenue === 0 ? "-" : "$" + formatNumber(movie?.revenue);
+    movie?.revenue != null && movie?.revenue !== 0 && movie?.type === "movie"
+      ? "$" + formatNumber(movie?.revenue)
+      : "-";
 
   return (
     <div className="container mx-auto max-w-7xl grid grid-cols-12 px-4 my-10">
