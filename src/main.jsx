@@ -8,6 +8,8 @@ import Movies from "./pages/movies/Movies.jsx";
 import Shows from "./pages/shows/Shows.jsx";
 import Search from "./pages/search/Search.jsx";
 import DetailsPage from "./pages/DetailsPage.jsx";
+import AuthForm from "./pages/auth/AuthForm.jsx";
+import { AuthProvider } from "./context/authProvider.jsx";
 
 const router = createBrowserRouter([
   {
@@ -34,12 +36,18 @@ const router = createBrowserRouter([
         path: "/:type/:id",
         element: <DetailsPage />,
       },
+      {
+        path: "/login",
+        element: <AuthForm />,
+      },
     ],
   },
 ]);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>
 );
