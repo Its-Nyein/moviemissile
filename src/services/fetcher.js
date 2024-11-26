@@ -59,3 +59,11 @@ export const fetchTvSeriesDiscovers = async (page, sortBy) => {
 
   return res?.data;
 };
+
+export const fetchSearchMovies = async (q, page) => {
+  const res = await axios.get(
+    `${baseUrl}/search/multi?api_key=${apiKey}&query=${q}&page=${page}`
+  );
+
+  return res?.data;
+};
