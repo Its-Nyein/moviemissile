@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import {
   fetchMoviesCast,
   fetchMoviesDetails,
+  fetchMoviesRecommendations,
   fetchMoviesReviews,
   imagePath,
 } from "../services/fetcher";
@@ -14,12 +15,14 @@ import { formatNumber } from "../helpers/helpers";
 import { CiBookmarkMinus, CiBookmarkPlus } from "react-icons/ci";
 import MoviesCast from "./movies/MoviesCast";
 import MoviesReviews from "./movies/MoviesReviews";
+import MovieCard from "../components/MovieCard";
 
 const DetailsPage = () => {
   const { type, id } = useParams();
   const [details, setDetails] = useState([]);
   const [casts, setCasts] = useState({});
   const [reviews, setReviews] = useState({});
+  const [recommendations, setRecommendations] = useState({});
   const [loading, setLoading] = useState(false);
 
   // useEffect(() => {
@@ -36,15 +39,18 @@ const DetailsPage = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const [detailsData, creditsData, reviewsData] = await Promise.all([
-          fetchMoviesDetails(type, id),
-          fetchMoviesCast(type, id),
-          fetchMoviesReviews(type, id),
-        ]);
+        const [detailsData, creditsData, reviewsData, recommendationsData] =
+          await Promise.all([
+            fetchMoviesDetails(type, id),
+            fetchMoviesCast(type, id),
+            fetchMoviesReviews(type, id),
+            fetchMoviesRecommendations(type, id),
+          ]);
 
         setDetails(detailsData);
         setCasts(creditsData);
         setReviews(reviewsData);
+        setRecommendations(recommendationsData);
       } catch (error) {
         console.log(error);
       } finally {
@@ -53,6 +59,8 @@ const DetailsPage = () => {
     };
     fetchData();
   }, [type, id]);
+
+  console.log(recommendations);
 
   if (loading) {
     return <LoadingSpinner />;
@@ -155,6 +163,27 @@ const DetailsPage = () => {
       )}
 
       {reviews?.length > 0 && <MoviesReviews reviews={reviews} />}
+
+      {recommendations?.length > 0 && (
+        <div className="container mx-auto max-w-7xl px-4 my-5">
+          <h2 className="text-lg font-semibold text-[#353535] mb-3">
+            Recommendations
+          </h2>
+          <div className="flex overflow-x-scroll gap-3">
+            {recommendations?.map((recommendation) => (
+              <div
+                key={recommendation.id}
+                className="w-36 min-w-[140px] min-h-[200px] flex-shrink-0"
+              >
+                <MovieCard
+                  item={recommendation}
+                  type={recommendation.media_type}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </Fragment>
   );
 };

@@ -29,7 +29,7 @@ const MoviesCast = ({ casts, crews, movie }) => {
   return (
     <div className="container mx-auto max-w-7xl grid grid-cols-12 px-4 my-10">
       <div className="col-span-12 md:col-span-8 lg:col-span-9">
-        <h2 className="text-lg font-semibold text-[#353535] mb-3">Cast</h2>
+        <h2 className="text-lg font-semibold text-[#353535] mb-3">Casts</h2>
         <div className="flex overflow-x-scroll overflow-y-hidden gap-3">
           {casts?.slice(0, visibleCasts).map((cast) => (
             <div

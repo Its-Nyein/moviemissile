@@ -35,3 +35,11 @@ export const fetchMoviesReviews = async (type, id) => {
 
   return res?.data?.results;
 };
+
+export const fetchMoviesRecommendations = async (type, id) => {
+  const res = await axios.get(
+    `${baseUrl}/${type}/${id}/recommendations?api_key=${apiKey}`
+  );
+
+  return res.data?.results;
+};
