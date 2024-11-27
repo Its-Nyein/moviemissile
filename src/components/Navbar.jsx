@@ -3,11 +3,13 @@ import MovieDBLogo from "../assets/moviedb.svg";
 import { useAuth } from "../context/useAuth";
 import profilePoster from "../assets/fallback-img.png";
 import { useState } from "react";
+import { FaBars } from "react-icons/fa";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -19,6 +21,7 @@ const Navbar = () => {
   };
 
   const profilePath = user?.photoURL === null ? profilePoster : user?.photoURL;
+  const closeMobileMenu = () => setMenuOpen(false);
 
   return (
     <nav className="bg-white text-[#353535] py-4 shadow-md">
@@ -46,7 +49,7 @@ const Navbar = () => {
           </a>
         </div>
 
-        <div className="space-x-6 flex items-center">
+        <div className="hidden md:flex space-x-6 items-center">
           <Link to="/" className="hover:text-gray-400">
             Home
           </Link>
@@ -100,7 +103,93 @@ const Navbar = () => {
             </div>
           )}
         </div>
+
+        <div className="flex md:hidden">
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="text-gray-600"
+          >
+            <FaBars size={24} />
+          </button>
+        </div>
       </div>
+
+      {menuOpen && (
+        <div className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-20">
+          <div className="bg-gray-200 w-64 h-full p-4 space-y-4">
+            <div className="flex justify-between items-center">
+              <Link
+                to="/"
+                className="text-xl font-bold text-red-600"
+                onClick={closeMobileMenu}
+              >
+                Moviemissile
+              </Link>
+              <button onClick={() => setMenuOpen(false)} className="text-black">
+                <span className="text-3xl">&times;</span>
+              </button>
+            </div>
+            <div className="space-y-4">
+              <Link
+                to="/"
+                className="block hover:text-gray-600"
+                onClick={closeMobileMenu}
+              >
+                Home
+              </Link>
+              <Link
+                to="/movies"
+                className="block hover:text-gray-600"
+                onClick={closeMobileMenu}
+              >
+                Movies
+              </Link>
+              <Link
+                to="/shows"
+                className="block hover:text-gray-600"
+                onClick={closeMobileMenu}
+              >
+                TV Shows
+              </Link>
+              <Link
+                to="/search"
+                className="block hover:text-gray-600"
+                onClick={closeMobileMenu}
+              >
+                Search
+              </Link>
+
+              {user ? (
+                <>
+                  <Link
+                    to="/watchlist"
+                    className="block hover:text-gray-600"
+                    onClick={closeMobileMenu}
+                  >
+                    Watchlist
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="block py-2 px-4 text-red-500 w-full text-left"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <button
+                  className="block py-2 px-4 text-red-500 w-full text-left"
+                  onClick={() => {
+                    navigate("/login");
+                    setMenuOpen(false);
+                  }}
+                >
+                  Login
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
