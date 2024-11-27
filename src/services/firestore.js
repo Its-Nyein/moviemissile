@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { db } from "../services/firebase";
 import {
   collection,
@@ -6,6 +7,7 @@ import {
   doc,
   getDoc,
   deleteDoc,
+  getDocs,
 } from "firebase/firestore";
 
 export const useFirestore = () => {
@@ -53,10 +55,22 @@ export const useFirestore = () => {
     }
   };
 
+  const getWatchlistData = useCallback(async (userId) => {
+    const querySnapshot = await getDocs(
+      collection(db, "users", userId, "watchlist")
+    );
+
+    const data = querySnapshot.docs.map((doc) => ({
+      ...doc.data(),
+    }));
+    return data;
+  }, []);
+
   return {
     addDocument,
     addToWatchlist,
     checkIsInWatchlist,
     removeFromWatchlist,
+    getWatchlistData,
   };
 };
