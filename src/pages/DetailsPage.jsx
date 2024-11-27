@@ -12,10 +12,10 @@ import { SlCalender } from "react-icons/sl";
 import { FaRegClock } from "react-icons/fa";
 import { FaStar } from "react-icons/fa6";
 import { formatNumber } from "../helpers/helpers";
-import { CiBookmarkMinus, CiBookmarkPlus } from "react-icons/ci";
 import MoviesCast from "./movies/MoviesCast";
 import MoviesReviews from "./movies/MoviesReviews";
 import MovieCard from "../components/MovieCard";
+import MoviesWatchlistBtn from "./movies/MoviesWatchlistBtn";
 
 const DetailsPage = () => {
   const { type, id } = useParams();
@@ -127,21 +127,7 @@ const DetailsPage = () => {
             {formatNumber(details?.vote_count)})
           </p>
 
-          <button className="relative hidden gap-1 border border-[#01b4e4] mb-3 p-2 overflow-hidden group">
-            <div className="absolute inset-0 bg-[#01b4e4] -z-10 transform scale-x-0 group-hover:scale-x-100 transition-all duration-300 ease-in-out"></div>
-            <CiBookmarkMinus className="group-hover:text-white" />
-            <span className="group-hover:text-white transition-all duration-300 ease-in-out">
-              Remove from watchlist
-            </span>
-          </button>
-
-          <button className="relative flex gap-1 border border-[#01b4e4] mb-3 p-2 overflow-hidden group">
-            <div className="absolute inset-0 bg-[#01b4e4] -z-10 transform scale-x-0 group-hover:scale-x-100 transition-all duration-300 ease-in-out"></div>
-            <CiBookmarkPlus className="group-hover:text-white" />
-            <span className="group-hover:text-white transition-all duration-300 ease-in-out">
-              Add to watchlist
-            </span>
-          </button>
+          <MoviesWatchlistBtn details={details} type={type} />
 
           <p className="text-gray-400 text-sm italic">{details?.tagline}</p>
 

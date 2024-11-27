@@ -10,6 +10,8 @@ import Search from "./pages/search/Search.jsx";
 import DetailsPage from "./pages/DetailsPage.jsx";
 import AuthForm from "./pages/auth/AuthForm.jsx";
 import { AuthProvider } from "./context/authProvider.jsx";
+import ProtectedRoute from "./components/routes/ProtectedRoute.jsx";
+import Watchlist from "./pages/Watchlist.jsx";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +41,14 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <AuthForm />,
+      },
+      {
+        path: "/watchlist",
+        element: (
+          <ProtectedRoute>
+            <Watchlist />
+          </ProtectedRoute>
+        ),
       },
     ],
   },
