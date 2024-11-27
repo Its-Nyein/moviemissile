@@ -19,8 +19,6 @@ const Watchlist = () => {
       .finally(() => setIsLoading(false));
   }, [user?.uid, getWatchlistData]);
 
-  console.log("data", watchlistData);
-
   if (isLoading) {
     return <LoadingSpinner />;
   }
