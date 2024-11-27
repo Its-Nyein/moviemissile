@@ -91,7 +91,7 @@ const MoviesWatchlistBtn = ({ details, type }) => {
     }
   };
 
-  if (isWatchlistLoading || isInWatchlist === null) {
+  if (isWatchlistLoading) {
     return (
       <div className="text-sm text-[#01b4e4] items-center my-2">
         Loading ...
