@@ -94,7 +94,7 @@ const DetailsPage = () => {
             <p>{releasedYear}</p>
           </div>
 
-          <div className="flex mb-3">
+          <div className="flex flex-col md:flex-row mb-3 gap-2 md:gap-0">
             <div className="flex gap-2 mr-1 items-center">
               <SlCalender />
               <span>
@@ -103,14 +103,14 @@ const DetailsPage = () => {
             </div>
             {type === "movie" && (
               <div className="flex gap-1">
-                <div className="mx-2">*</div>
+                <div className="hidden md:flex mx-2">*</div>
                 <FaRegClock />
                 <div>{minutesToHrs(details?.runtime)}</div>
               </div>
             )}
           </div>
 
-          <p className="flex mb-3 gap-1">
+          <p className="flex mb-3 gap-1 flex-wrap">
             {details.genres?.map((genre) => (
               <span
                 key={genre?.id}
