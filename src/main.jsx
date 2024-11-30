@@ -12,6 +12,7 @@ import AuthForm from "./pages/auth/AuthForm.jsx";
 import { AuthProvider } from "./context/authProvider.jsx";
 import ProtectedRoute from "./components/routes/ProtectedRoute.jsx";
 import Watchlist from "./pages/Watchlist.jsx";
+import NotFound from "./pages/NotFound.jsx";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
             <Watchlist />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: "*",
+        element: <NotFound />,
       },
     ],
   },
