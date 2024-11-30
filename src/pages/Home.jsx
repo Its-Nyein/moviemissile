@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchAllMovies } from "../services/fetcher";
 import MovieCard from "../components/MovieCard";
-import LoadingSpinner from "../UI/LoadingSpinner";
+import SkeletonLoader from "../UI/SkeletonLoader";
 
 const Home = () => {
   const [data, setData] = useState([]);
@@ -15,10 +15,6 @@ const Home = () => {
       .catch((err) => console.log(err))
       .finally(() => setLoading(false));
   }, [timeWindow]);
-
-  if (loading) {
-    return <LoadingSpinner />;
-  }
 
   return (
     <div className="container mx-auto max-w-7xl px-4 my-5">
@@ -50,11 +46,26 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-4 align-middle my-8">
-        {!loading &&
-          data.map((item) => (
-            <MovieCard key={item.id} item={item} type={item.media_type} />
-          ))}
+      <div
+        className={`transition-all duration-300 ${
+          loading ? "bg-white/50 backdrop-blur-md" : ""
+        }`}
+      >
+        {loading ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-4 align-middle my-8">
+            {Array(data?.length)
+              .fill("")
+              .map((_, idx) => (
+                <SkeletonLoader key={idx} />
+              ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-4 align-middle my-8">
+            {data.map((movie) => (
+              <MovieCard key={movie.id} item={movie} type="movie" />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
