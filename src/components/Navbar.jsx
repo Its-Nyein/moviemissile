@@ -4,6 +4,7 @@ import { useAuth } from "../context/useAuth";
 import profilePoster from "../assets/fallback-img.png";
 import { useState } from "react";
 import { FaBars } from "react-icons/fa";
+import { AnimatePresence, motion } from "framer-motion";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -114,82 +115,101 @@ const Navbar = () => {
         </div>
       </div>
 
-      {menuOpen && (
-        <div className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-20">
-          <div className="bg-gray-200 w-64 h-full p-4 space-y-4">
-            <div className="flex justify-between items-center">
-              <Link
-                to="/"
-                className="text-xl font-bold text-red-600"
-                onClick={closeMobileMenu}
-              >
-                Moviemissile
-              </Link>
-              <button onClick={() => setMenuOpen(false)} className="text-black">
-                <span className="text-3xl">&times;</span>
-              </button>
-            </div>
-            <div className="space-y-4">
-              <Link
-                to="/"
-                className="block hover:text-gray-600"
-                onClick={closeMobileMenu}
-              >
-                Home
-              </Link>
-              <Link
-                to="/movies"
-                className="block hover:text-gray-600"
-                onClick={closeMobileMenu}
-              >
-                Movies
-              </Link>
-              <Link
-                to="/shows"
-                className="block hover:text-gray-600"
-                onClick={closeMobileMenu}
-              >
-                TV Shows
-              </Link>
-              <Link
-                to="/search"
-                className="block hover:text-gray-600"
-                onClick={closeMobileMenu}
-              >
-                Search
-              </Link>
-
-              {user ? (
-                <>
-                  <Link
-                    to="/watchlist"
-                    className="block hover:text-gray-600"
-                    onClick={closeMobileMenu}
-                  >
-                    Watchlist
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="block py-2 px-4 text-red-500 w-full text-left"
-                  >
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <button
-                  className="block py-2 px-4 text-red-500 w-full text-left"
-                  onClick={() => {
-                    navigate("/login");
-                    setMenuOpen(false);
-                  }}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-20"
+            onClick={closeMobileMenu}
+          >
+            <motion.div
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", stiffness: 100, damping: 20 }}
+              className="bg-gray-200 w-64 h-full p-4 space-y-4 shadow-xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex justify-between items-center">
+                <Link
+                  to="/"
+                  className="text-xl font-bold text-red-600"
+                  onClick={closeMobileMenu}
                 >
-                  Login
+                  Moviemissile
+                </Link>
+                <button
+                  onClick={() => setMenuOpen(false)}
+                  className="text-black hover:text-red-600 transition"
+                >
+                  <span className="text-3xl">&times;</span>
                 </button>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+              </div>
+              <div className="space-y-4">
+                <Link
+                  to="/"
+                  className="block hover:text-gray-600"
+                  onClick={closeMobileMenu}
+                >
+                  Home
+                </Link>
+                <Link
+                  to="/movies"
+                  className="block hover:text-gray-600"
+                  onClick={closeMobileMenu}
+                >
+                  Movies
+                </Link>
+                <Link
+                  to="/shows"
+                  className="block hover:text-gray-600"
+                  onClick={closeMobileMenu}
+                >
+                  TV Shows
+                </Link>
+                <Link
+                  to="/search"
+                  className="block hover:text-gray-600"
+                  onClick={closeMobileMenu}
+                >
+                  Search
+                </Link>
+
+                {user ? (
+                  <>
+                    <Link
+                      to="/watchlist"
+                      className="block hover:text-gray-600"
+                      onClick={closeMobileMenu}
+                    >
+                      Watchlist
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="mt-4 w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition"
+                    >
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    className="mt-4 w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition"
+                    onClick={() => {
+                      navigate("/login");
+                      setMenuOpen(false);
+                    }}
+                  >
+                    Login
+                  </button>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };
