@@ -33,7 +33,8 @@ const AuthForm = () => {
         }, 1500);
       }
     } catch (error) {
-      setError(error.message);
+      console.log("Error", error);
+      setError("Incorrect email or password.");
     }
   };
 
@@ -116,13 +117,15 @@ const AuthForm = () => {
       </div>
 
       {successMessage && (
-        <p className="font-semibold text-gray-400 mt-3 text-center">
+        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mt-3 text-center">
           {successMessage}
-        </p>
+        </div>
       )}
 
       {error && (
-        <p className="font-semibold text-red-500 mt-3 text-center">{error}</p>
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mt-3 text-center">
+          {error}
+        </div>
       )}
     </div>
   );
