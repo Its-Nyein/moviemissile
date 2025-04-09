@@ -13,6 +13,7 @@ import { AuthProvider } from "./context/authProvider.jsx";
 import ProtectedRoute from "./components/routes/ProtectedRoute.jsx";
 import Watchlist from "./pages/Watchlist.jsx";
 import NotFound from "./pages/NotFound.jsx";
+import { PersonDetails } from "./pages/person/PersonDetails.jsx";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
       {
         path: "/:type/:id",
         element: <DetailsPage />,
+      },
+      {
+        path: "/person/:id",
+        element: <PersonDetails />,
       },
       {
         path: "/login",

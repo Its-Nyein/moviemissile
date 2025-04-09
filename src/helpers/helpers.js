@@ -43,3 +43,33 @@ export const generateDate = (createdAt) => {
     months[dateObj.getMonth()]
   } ${dateObj.getDate()}, ${dateObj.getFullYear()}`;
 };
+
+export const getGender = (gender) => {
+    switch (gender) {
+      case 1:
+        return "Female";
+      case 2:
+        return "Male";
+      case 3:
+        return "Non-binary";
+      default:
+        return "Not specified";
+    }
+  }
+
+export const formatBirthday = (birthday) => {
+    if (!birthday) return "N/A";
+    const birthDate = new Date(birthday);
+    const now = new Date();
+    const age = now.getFullYear() - birthDate.getFullYear();
+    const isBirthdayPassed =
+      now.getMonth() > birthDate.getMonth() ||
+      (now.getMonth() === birthDate.getMonth() && now.getDate() >= birthDate.getDate());
+    const calculatedAge = isBirthdayPassed ? age : age - 1;
+
+    return `${birthDate.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    })} (${calculatedAge} years old)`;
+  };
