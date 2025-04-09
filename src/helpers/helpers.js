@@ -73,3 +73,7 @@ export const formatBirthday = (birthday) => {
       year: "numeric",
     })} (${calculatedAge} years old)`;
   };
+
+  export const formatPopularity = (popularity) => {
+    return popularity ? popularity.toFixed(2) : "N/A";
+  }

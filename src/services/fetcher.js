@@ -72,3 +72,8 @@ export const fetchPersonDetails = async (id) => {
   const res = await axios.get(`${baseUrl}/person/${id}?api_key=${apiKey}`);
   return res?.data;
 };
+
+export const fetchPersonMovieCredits = async (id) => {
+  const res = await axios.get(`${baseUrl}/person/${id}/movie_credits?api_key=${apiKey}`);
+  return res?.data;
+};
