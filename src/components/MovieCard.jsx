@@ -1,8 +1,12 @@
 import { imagePath } from "../services/fetcher";
 import fallback from "../assets/poster-fallback.jpg";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import SkeletonLoader from "../UI/SkeletonLoader";
 
 const MovieCard = ({ item, type }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   const posterUrl = item.poster_path
     ? `${imagePath}/${item.poster_path}`
     : fallback;
@@ -11,13 +15,17 @@ const MovieCard = ({ item, type }) => {
       ? item.first_air_date?.split("-")[0] || "unknown"
       : item.release_date?.split("-")[0] || "unknown";
   return (
-    <div className="relative">
+    <div className="relative flex flex-col items-center">
       <Link to={`/${type}/${item?.id}`} className="block">
+        {!imageLoaded && <SkeletonLoader />}
         <img
           key={item.id}
           src={posterUrl}
           alt={item.title || item.name}
-          className="w-auto h-[210px] object-cover rounded-lg shadow mx-auto"
+          className={`h-[220px] w-auto object-cover rounded-lg shadow mx-auto ${
+            imageLoaded ? "" : "hidden"
+          }`}
+          onLoad={() => setImageLoaded(true)}
         />
       </Link>
 
