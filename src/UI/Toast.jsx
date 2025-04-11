@@ -27,7 +27,7 @@ const Toast = ({ message, type, onClose }) => {
 
   return (
     <div
-      className={`fixed bottom-44 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-md shadow-lg ${toastClass}`}
+      className={`fixed bottom-12 z-50 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-md shadow-lg ${toastClass}`}
     >
       <div className="flex items-center justify-between">
         <span>{message}</span>

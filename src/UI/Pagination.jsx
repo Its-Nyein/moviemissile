@@ -42,11 +42,11 @@ const Pagination = ({
       >
         <div className={`${styles.arrow} ${styles.left}`} />
       </li>
-      {paginationRange.map((pageNumber) => {
+      {paginationRange.map((pageNumber, index) => {
         if (pageNumber === "DOTS") {
           return (
             <li
-              key={"dots"}
+              key={`dots-${index}`}
               className={`${styles["pagination-item"]} ${styles.dots}`}
             >
               &#8230;
