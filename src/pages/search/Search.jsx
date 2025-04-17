@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { fetchSearchMovies } from "../../services/fetcher";
 import LoadingSpinner from "../../UI/LoadingSpinner";
 import MovieCard from "../../components/MovieCard";
@@ -12,6 +12,8 @@ const Search = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
 
+  const searchInputRef = useRef(null);
+
   useEffect(() => {
     if (searchMovies.trim() === "") {
       return;
@@ -23,6 +25,12 @@ const Search = () => {
       .then((error) => console.log(error))
       .finally(() => setLoading(false));
   }, [searchMovies, pages]);
+
+  useEffect(() => {
+    if (searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, []);
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
@@ -46,6 +54,7 @@ const Search = () => {
           type="text"
           placeholder="Search movies, tv shows"
           value={tempSearchMoviesVal}
+          ref={searchInputRef}
           className="w-full  border border-[#01b4e4] p-3 rounded focus:outline-none shadow bg-transparent placeholder:text-gray-400"
           onChange={(e) => setTempSearchMoviesVal(e.target.value)}
         />
