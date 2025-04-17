@@ -15,6 +15,19 @@ const Home = () => {
       .finally(() => setLoading(false));
   }, [timeWindow]);
 
+  if (data.length === 0) {
+    return (
+      <div className="container mx-auto max-w-7xl px-4 my-5">
+        <h2 className="font-semibold uppercase text-[#353535] opacity-80">
+          Movies
+        </h2>
+        <p className="text-center mt-4 text-gray-500">
+          No movies available on this page.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto max-w-7xl px-4 my-5">
       <div className="flex items-center gap-4">

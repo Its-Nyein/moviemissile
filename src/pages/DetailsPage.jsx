@@ -16,6 +16,7 @@ import MoviesCast from "./movies/MoviesCast";
 import MoviesReviews from "./movies/MoviesReviews";
 import MovieCard from "../components/MovieCard";
 import MoviesWatchlistBtn from "./movies/MoviesWatchlistBtn";
+import fallback from "../assets/poster-fallback.jpg";
 
 const DetailsPage = () => {
   const { type, id } = useParams();
@@ -78,12 +79,16 @@ const DetailsPage = () => {
     return `${hours}h ${remainingMinutes}m`;
   };
 
+  const posterUrl = details?.poster_path
+    ? `${imagePath}/${details?.poster_path}`
+    : fallback;
+
   return (
     <Fragment>
       <div className="container mx-auto max-w-7xl px-4 my-5 grid grid-cols-12 gap-5">
         <div className="col-span-4 md:col-span-3">
           <img
-            src={`${imagePath}/${details.poster_path}`}
+            src={posterUrl}
             alt={details?.title || details?.name}
             className="object-cover rounded-lg shadow"
           />

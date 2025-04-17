@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchMoviesDiscovers } from "../../services/fetcher";
 import MovieCard from "../../components/MovieCard";
 import Pagination from "../../UI/Pagination";
+import Footer from "../../components/Footer";
 
 const Movies = () => {
   const [movies, setMovies] = useState([]);
@@ -15,6 +16,19 @@ const Movies = () => {
       .catch((error) => console.log(error));
   }, [pages, sortBy]);
 
+  if (movies.length === 0) {
+    return (
+      <div className="container mx-auto max-w-7xl px-4 my-5">
+        <h2 className="font-semibold uppercase text-[#353535] opacity-80">
+          Discover Movies
+        </h2>
+        <p className="text-center mt-4 text-gray-500">
+          No movies available on this page.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto max-w-7xl px-4 my-5">
       <h2 className="font-semibold uppercase text-[#353535] opacity-80">
@@ -27,12 +41,14 @@ const Movies = () => {
         ))}
       </div>
 
-      <Pagination
-        onPageChange={setPages}
-        totalCount={totalPages}
-        currentPage={pages}
-        pageSize={20}
-      />
+      {movies.length > 0 && (
+        <Pagination
+          onPageChange={setPages}
+          totalCount={totalPages}
+          currentPage={pages}
+          pageSize={20}
+        />
+      )}
     </div>
   );
 };

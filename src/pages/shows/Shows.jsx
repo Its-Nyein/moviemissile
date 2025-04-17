@@ -57,12 +57,14 @@ const Shows = () => {
         ))}
       </div>
 
-      <Pagination
-        onPageChange={setPages}
-        totalCount={totalPages}
-        currentPage={pages}
-        pageSize={20}
-      />
+      {tvShows.length > 0 && (
+        <Pagination
+          onPageChange={setPages}
+          totalCount={totalPages}
+          currentPage={pages}
+          pageSize={20}
+        />
+      )}
     </div>
   );
 };
