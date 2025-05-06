@@ -46,7 +46,7 @@ const MoviesCast = ({ casts, crews, movie }) => {
                 onClick={loadMore}
               >
                 View All{" "}
-                <span>
+                <span className="animate-slideRight">
                   <FaAnglesRight />
                 </span>
               </p>
