@@ -2,13 +2,14 @@ import { Link, useNavigate } from "react-router-dom";
 import MovieDBLogo from "../assets/moviedb.svg";
 import { useAuth } from "../context/useAuth";
 import profilePoster from "../assets/fallback-img.png";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import { AnimatePresence, motion } from "framer-motion";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const menuRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -23,6 +24,20 @@ const Navbar = () => {
 
   const profilePath = user?.photoURL === null ? profilePoster : user?.photoURL;
   const closeMobileMenu = () => setMenuOpen(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("pointerdown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav className="bg-white text-[#353535] py-4 shadow-md">
@@ -64,7 +79,7 @@ const Navbar = () => {
             Search
           </Link>
           {user ? (
-            <div>
+            <div ref={menuRef}>
               <div className="relative">
                 <button
                   className="flex items-center space-x-2"
