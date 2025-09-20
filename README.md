@@ -11,7 +11,6 @@ Moviemissile is movie info app with a variety of features and pagination that us
 - TailwindCSS
 - Firebase (SignIn, SignUp and Authentication with email and password)
 
-
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
