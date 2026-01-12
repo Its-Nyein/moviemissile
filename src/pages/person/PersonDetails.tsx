@@ -1,18 +1,18 @@
 import { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import {
-  fetchPersonDetails,
-  fetchPersonMovieCredits,
-  imagePath,
-} from "../../services/fetcher";
 import LoadingSpinner from "../../UI/LoadingSpinner";
+import MovieCard from "../../components/MovieCard";
 import {
   formatBirthday,
   formatPopularity,
   getGender,
 } from "../../helpers/helpers";
-import MovieCard from "../../components/MovieCard";
-import type { Person, MovieCredit } from "../../types";
+import {
+  fetchPersonDetails,
+  fetchPersonMovieCredits,
+  imagePath,
+} from "../../services/fetcher";
+import type { MovieCredit, Person } from "../../types";
 
 export const PersonDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -51,86 +51,85 @@ export const PersonDetails = () => {
   }
 
   if (!person) {
-    return <p className="text-center mt-4 text-gray-500">Person not found.</p>;
+    return (
+      <p className="text-center mt-4 text-muted-foreground">
+        Person not found.
+      </p>
+    );
   }
 
   return (
     <Fragment>
-      <div className="container mx-auto max-w-7xl px-4 my-5 grid grid-cols-12 gap-5">
+      <div className="container mx-auto max-w-7xl px-4 py-8 grid grid-cols-12 gap-5">
         <div className="col-span-4">
           <img
             src={`${imagePath}/${person?.profile_path}`}
-            className="object-cover rounded-lg shadow"
+            alt={person?.name}
+            className="w-full object-cover rounded-lg shadow"
           />
         </div>
-        <div className="col-span-8 mt-0 mt-md-2 mt-xl-4">
-          <div className="gap-2 mb-3 items-center text-sm md:text-lg">
-            <h4 className="text-[#353535] font-bold">Name</h4>
-            <p>{person?.name}</p>
+        <div className="col-span-8">
+          <div className="gap-2 mb-3 text-sm md:text-base">
+            <h4 className="text-foreground font-bold">Name</h4>
+            <p className="text-muted-foreground">{person?.name}</p>
           </div>
 
-          <div className="gap-2 mb-3 items-center text-sm md:text-lg">
-            <h4 className="text-[#353535] font-bold">Known For</h4>
-            <p>{person?.known_for_department}</p>
+          <div className="gap-2 mb-3 text-sm md:text-base">
+            <h4 className="text-foreground font-bold">Known For</h4>
+            <p className="text-muted-foreground">
+              {person?.known_for_department}
+            </p>
           </div>
 
-          <div className="gap-2 mb-3 items-center text-sm md:text-lg">
-            <h4 className="text-[#353535] font-bold">Popularity</h4>
-            <div className="flex items-center gap-2">
-              <p>{formatPopularity(person?.popularity)}</p>
-              {/* <div className="w-full bg-gray-200 rounded-full h-2.5">
-                <div
-                  className="bg-blue-500 h-2.5 rounded-full"
-                  style={{
-                    width: `${Math.min(person?.popularity * 10, 100)}%`,
-                  }}
-                ></div>
-              </div> */}
-            </div>
+          <div className="gap-2 mb-3 text-sm md:text-base">
+            <h4 className="text-foreground font-bold">Popularity</h4>
+            <p className="text-muted-foreground">
+              {formatPopularity(person?.popularity)}
+            </p>
           </div>
 
-          <div className="gap-2 mb-3 items-center text-sm md:text-lg">
-            <h4 className="text-[#353535] font-bold">Gender</h4>
-            <p>{getGender(person?.gender)}</p>
+          <div className="gap-2 mb-3 text-sm md:text-base">
+            <h4 className="text-foreground font-bold">Gender</h4>
+            <p className="text-muted-foreground">{getGender(person?.gender)}</p>
           </div>
 
-          <div className="gap-2 mb-3 items-center text-sm md:text-lg">
-            <h4 className="text-[#353535] font-bold">Birthday</h4>
-            <p>{formatBirthday(person?.birthday || "")}</p>
+          <div className="gap-2 mb-3 text-sm md:text-base">
+            <h4 className="text-foreground font-bold">Birthday</h4>
+            <p className="text-muted-foreground">
+              {formatBirthday(person?.birthday || "")}
+            </p>
           </div>
 
           {person?.place_of_birth && (
-            <div className="gap-2 mb-3 items-center text-sm md:text-lg">
-              <h4 className="text-[#353535] font-bold">Place of Birth</h4>
-              <p>{person?.place_of_birth}</p>
+            <div className="gap-2 mb-3 text-sm md:text-base">
+              <h4 className="text-foreground font-bold">Place of Birth</h4>
+              <p className="text-muted-foreground">{person?.place_of_birth}</p>
             </div>
           )}
 
           {person?.also_known_as && person.also_known_as.length > 0 && (
-            <div className="gap-2 mb-3 items-center text-sm md:text-lg">
-              <h4 className="text-[#353535] font-bold">Also Known As</h4>
-              {person?.also_known_as?.map((item: string, index: number) => {
-                return (
-                  <div key={index}>
-                    <p className="mb-1">{item}</p>
-                  </div>
-                );
-              })}
+            <div className="gap-2 mb-3 text-sm md:text-base">
+              <h4 className="text-foreground font-bold">Also Known As</h4>
+              {person?.also_known_as?.map((item: string, index: number) => (
+                <p key={index} className="text-muted-foreground mb-1">
+                  {item}
+                </p>
+              ))}
             </div>
           )}
         </div>
       </div>
 
       {person?.biography && (
-        <div className="mt-8 container mx-auto max-w-7xl px-4 my-5 grid">
-          <h2 className="text-lg font-bold text-[#353535] mb-2">Biography</h2>
-          <span style={{ lineHeight: "1.25rem" }}>
+        <div className="mt-8 container mx-auto max-w-7xl px-4 my-5">
+          <h2 className="text-lg font-bold text-foreground mb-2">Biography</h2>
+          <span className="text-muted-foreground leading-relaxed">
             {biography
               ? person?.biography
               : person?.biography?.slice(0, 320) + "..."}
             <button
               onClick={toggleBiography}
-              className="text-blue-500 font-semibold"
+              className="text-primary font-semibold ml-1 hover:underline"
             >
               {biography ? "See Less" : "See More"}
             </button>
@@ -140,10 +139,10 @@ export const PersonDetails = () => {
 
       {movies?.length > 0 && (
         <div className="container mx-auto max-w-7xl px-4 my-5">
-          <h2 className="text-lg font-semibold text-[#353535] mb-3">
+          <h2 className="text-lg font-semibold text-foreground mb-3">
             Known For Movies
           </h2>
-          <div className="flex overflow-x-scroll gap-3 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-white dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
+          <div className="flex overflow-x-auto gap-3 pb-2">
             {movies?.map((mov) => (
               <div
                 key={mov.id}

@@ -1,8 +1,11 @@
+import { Button } from "@/components/ui/button";
+import { Bookmark } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useAuth } from "../context/useAuth";
-import { useFirestore } from "../services/firestore";
+import { Link } from "react-router-dom";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import WatchlistCard from "../components/WatchlistCard";
+import { useAuth } from "../context/useAuth";
+import { useFirestore } from "../services/firestore";
 import type { WatchlistItem } from "../types";
 
 const Watchlist = () => {
@@ -18,7 +21,6 @@ const Watchlist = () => {
     setIsLoading(true);
     getWatchlistData(user.uid)
       .then((res) => {
-        // Transform the data to match WatchlistItem interface
         const transformedData = res.map((item: Record<string, unknown>) => ({
           id: item.id?.toString() || item.movieId?.toString(),
           movieId: item.movieId || item.id,
@@ -44,19 +46,40 @@ const Watchlist = () => {
   }
 
   return (
-    <div className="container mx-auto max-w-7xl px-4 my-5">
-      <h2 className="font-semibold uppercase text-[#353535] opacity-80">
-        Watchlist Movies
-      </h2>
+    <div className="container mx-auto max-w-7xl px-4 py-8">
+      <div className="flex items-center gap-3 mb-8">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+            My Watchlist
+          </h1>
+          <p className="text-muted-foreground text-sm">
+            {watchlistData?.length > 0
+              ? `${watchlistData.length} titles saved`
+              : "Your saved movies and shows"}
+          </p>
+        </div>
+      </div>
 
       {!isLoading && watchlistData?.length === 0 && (
-        <div className="text-center font-semibold opacity-80 my-5">
-          Watchlist is empty
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mb-6">
+            <Bookmark className="h-12 w-12 text-primary/50" />
+          </div>
+          <h3 className="text-xl font-semibold text-foreground mb-3">
+            Your watchlist is empty
+          </h3>
+          <p className="text-muted-foreground max-w-md mb-6">
+            Start adding movies and TV shows to your watchlist to keep track of
+            what you want to watch.
+          </p>
+          <Button asChild className="rounded-full gradient-bg hover:opacity-90">
+            <Link to="/movies">Discover Movies</Link>
+          </Button>
         </div>
       )}
 
       {!isLoading && watchlistData?.length > 0 && (
-        <div className="grid grid-cols-1 gap-4 align-middle my-8 ml-7">
+        <div className="flex flex-col gap-4">
           {watchlistData?.map((data) => (
             <WatchlistCard key={data.id} item={data} type={data.media_type} />
           ))}

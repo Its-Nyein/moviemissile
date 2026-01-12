@@ -1,11 +1,13 @@
 const Footer = () => {
   return (
-    <footer className="bg-gray-200 py-5">
-      <div className="container mx-auto max-w-7xl text-center">
+    <footer className="bg-muted py-5 mt-auto">
+      <div className="container mx-auto max-w-7xl text-center text-muted-foreground">
         The movie data are provided by{" "}
         <a
           href="https://www.themoviedb.org/"
-          className="hover:text-[#0d6efd] font-semibold opacity-80"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-foreground font-semibold transition-colors"
         >
           The Movie DB
         </a>

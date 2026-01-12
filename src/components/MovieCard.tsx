@@ -1,9 +1,10 @@
-import { imagePath } from "../services/fetcher";
-import fallback from "../assets/poster-fallback.jpg";
-import { Link } from "react-router-dom";
+import { cn } from "@/lib/utils";
+import { Star } from "lucide-react";
 import { useState } from "react";
-import SkeletonLoader from "../UI/SkeletonLoader";
-import type { Movie, MediaType } from "../types";
+import { Link } from "react-router-dom";
+import fallback from "../assets/poster-fallback.jpg";
+import { imagePath } from "../services/fetcher";
+import type { MediaType, Movie } from "../types";
 
 interface MovieCardProps {
   item: Movie;
@@ -18,32 +19,50 @@ const MovieCard = ({ item, type }: MovieCardProps) => {
     : fallback;
   const releasedYear =
     type === "tv"
-      ? item.first_air_date?.split("-")[0] || "unknown"
-      : item.release_date?.split("-")[0] || "unknown";
+      ? item.first_air_date?.split("-")[0] || ""
+      : item.release_date?.split("-")[0] || "";
+
+  const rating = item.vote_average?.toFixed(1);
+
   return (
-    <div className="relative flex flex-col items-center">
-      <Link to={`/${type}/${item?.id}`} className="block">
-        {!imageLoaded && <SkeletonLoader />}
+    <Link to={`/${type}/${item?.id}`} className="group block">
+      <div className="relative overflow-hidden rounded-lg bg-muted">
+        {/* Skeleton loader */}
+        {!imageLoaded && (
+          <div className="aspect-[2/3] w-full bg-muted animate-pulse" />
+        )}
+
+        {/* Poster image */}
         <img
           key={item.id}
           src={posterUrl}
           alt={item.title || item.name}
-          className={`h-[220px] w-auto object-cover rounded-lg shadow mx-auto ${
-            imageLoaded ? "" : "hidden"
-          }`}
+          className={cn(
+            "aspect-[2/3] w-full object-cover transition-transform duration-300 group-hover:scale-105",
+            imageLoaded ? "block" : "hidden"
+          )}
           onLoad={() => setImageLoaded(true)}
         />
-      </Link>
 
-      <div className="flex flex-col text-center gap-2 py-2">
-        <Link to={`/${type}/${item?.id}`}>
-          <p className="font-semibold text-[#353535] hover:text-gray-600 hover:scale-105 duration-0 cursor-pointer">
-            {item.title || item.name}
-          </p>
-        </Link>
-        <span className="text-sm text-gray-400">{releasedYear}</span>
+        {/* Rating badge */}
+        {rating && rating !== "0.0" && (
+          <div className="absolute top-2 left-2 bg-black/70 rounded px-1.5 py-0.5 flex items-center gap-1">
+            <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+            <span className="text-white text-xs font-medium">{rating}</span>
+          </div>
+        )}
       </div>
-    </div>
+
+      {/* Info below card */}
+      <div className="mt-2">
+        <p className="font-medium text-foreground line-clamp-1 text-sm">
+          {item.title || item.name}
+        </p>
+        <p className="text-xs text-muted-foreground mt-0.5">
+          {releasedYear}
+        </p>
+      </div>
+    </Link>
   );
 };
 

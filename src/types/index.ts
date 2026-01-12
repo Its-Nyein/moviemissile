@@ -260,6 +260,7 @@ export type SortBy =
   | "popularity.desc"
   | "release_date.desc"
   | "vote_average.desc"
+  | "vote_average.desc&vote_count.gte=1000"
   | "title.asc";
 
 // Environment variables

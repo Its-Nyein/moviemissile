@@ -1,17 +1,32 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import MovieDBLogo from "../assets/moviedb.svg";
-import { useAuth } from "../context/useAuth";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
+import { Bookmark, LogOut, Menu, Search } from "lucide-react";
+import { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import profilePoster from "../assets/fallback-img.png";
-import { FaBars } from "react-icons/fa";
-import { AnimatePresence, motion } from "framer-motion";
+import { useAuth } from "../context/useAuth";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, logout } = useAuth();
-  const menuRef = useRef<HTMLDivElement>(null);
-  const [isOpen, setIsOpen] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -23,210 +38,199 @@ const Navbar = () => {
   };
 
   const profilePath = user?.photoURL === null ? profilePoster : user?.photoURL;
-  const closeMobileMenu = () => setMenuOpen(false);
+  const closeMobileMenu = () => setMobileMenuOpen(false);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
+  const navLinks = [
+    { href: "/movies", label: "Movies" },
+    { href: "/shows", label: "TV Shows" },
+  ];
 
-    document.addEventListener("pointerdown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("pointerdown", handleClickOutside);
-    };
-  }, []);
+  const isActiveLink = (href: string) => {
+    if (href === "/") return location.pathname === "/";
+    return location.pathname.startsWith(href);
+  };
 
   return (
-    <nav className="bg-white text-[#353535] py-4 shadow-md">
-      <div className="container mx-auto max-w-7xl flex items-center justify-between px-4">
-        <div className="flex items-center space-x-10">
-          <Link to="/" className="text-xl font-bold">
-            <span>Moviemissile</span>
+    <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
+      <div className="container mx-auto max-w-7xl flex items-center justify-between px-4 h-14">
+        {/* Logo */}
+        <div className="flex items-center gap-8">
+          <Link to="/" className="font-bold text-lg text-foreground">
+            Moviemissile
           </Link>
 
-          <span className="text-sm text-gray-400 hidden md:inline">
-            Powered By
-          </span>
-
-          <a
-            href="https://www.themoviedb.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="items-center space-x-2 hover:opacity-80 hidden md:flex"
-          >
-            <img
-              src={MovieDBLogo}
-              alt="The Movie Database Logo"
-              className="h-8"
-            />
-          </a>
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-6">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                to={link.href}
+                className={cn(
+                  "text-sm font-medium transition-colors",
+                  isActiveLink(link.href)
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
         </div>
 
-        <div className="hidden md:flex space-x-6 items-center">
-          <Link to="/" className="hover:text-gray-400">
-            Home
-          </Link>
-          <Link to="/movies" className="hover:text-gray-400">
-            Movies
-          </Link>
-          <Link to="/shows" className="hover:text-gray-400">
-            TV Shows
-          </Link>
-          <Link to="/search" className="hover:text-gray-400">
-            Search
-          </Link>
+        {/* Desktop Right Side */}
+        <div className="hidden md:flex items-center gap-2">
+          <Button variant="ghost" size="icon" asChild className="h-9 w-9">
+            <Link to="/search">
+              <Search className="h-4 w-4" />
+            </Link>
+          </Button>
+
+          <ThemeToggle />
+
           {user ? (
-            <div ref={menuRef}>
-              <div className="relative">
-                <button
-                  className="flex items-center space-x-2"
-                  onClick={() => setIsOpen(!isOpen)}
-                >
-                  <img
-                    src={profilePath}
-                    alt="User Avatar"
-                    className="w-10 h-10 rounded-full"
-                  />
-                </button>
-                {isOpen && (
-                  <div className="flex flex-col absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-md border border-gray-200 z-10">
-                    <Link
-                      to="/watchlist"
-                      className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                    >
-                      Watchlist
-                    </Link>
-                    <button
-                      onClick={handleLogout}
-                      className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                    >
-                      Logout
-                    </button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={profilePath ?? undefined} alt="User" />
+                    <AvatarFallback className="bg-muted text-muted-foreground text-sm">
+                      {user.email?.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <div className="flex items-center gap-2 p-2">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={profilePath ?? undefined} />
+                    <AvatarFallback className="bg-muted text-sm">
+                      {user.email?.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium truncate">{user.email}</p>
                   </div>
-                )}
-              </div>
-            </div>
+                </div>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link to="/watchlist" className="cursor-pointer">
+                    <Bookmark className="h-4 w-4 mr-2" />
+                    Watchlist
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="text-destructive focus:text-destructive cursor-pointer"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Log out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
-            <div>
-              <Link to="/login">
-                <button className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600">
-                  Login
-                </button>
-              </Link>
-            </div>
+            <Button asChild size="sm">
+              <Link to="/login">Sign in</Link>
+            </Button>
           )}
         </div>
 
-        <div className="flex md:hidden">
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="text-gray-600"
-          >
-            <FaBars size={24} />
-          </button>
-        </div>
-      </div>
-
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-20"
-            onClick={closeMobileMenu}
-          >
-            <motion.div
-              initial={{ x: "-100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "-100%" }}
-              transition={{ type: "spring", stiffness: 100, damping: 20 }}
-              className="bg-gray-200 w-64 h-full p-4 space-y-4 shadow-xl"
-              onClick={(e: React.MouseEvent<HTMLDivElement>) =>
-                e.stopPropagation()
-              }
-            >
-              <div className="flex justify-between items-center">
+        {/* Mobile Menu */}
+        <div className="flex md:hidden items-center gap-1">
+          <Button variant="ghost" size="icon" asChild className="h-9 w-9">
+            <Link to="/search">
+              <Search className="h-4 w-4" />
+            </Link>
+          </Button>
+          <ThemeToggle />
+          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-9 w-9">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-72">
+              <SheetHeader className="text-left">
+                <SheetTitle>Menu</SheetTitle>
+              </SheetHeader>
+              <div className="flex flex-col gap-1 mt-6">
                 <Link
                   to="/"
-                  className="text-xl font-bold text-red-600"
                   onClick={closeMobileMenu}
-                >
-                  Moviemissile
-                </Link>
-                <button
-                  onClick={() => setMenuOpen(false)}
-                  className="text-black hover:text-red-600 transition"
-                >
-                  <span className="text-3xl">&times;</span>
-                </button>
-              </div>
-              <div className="space-y-4">
-                <Link
-                  to="/"
-                  className="block hover:text-gray-600"
-                  onClick={closeMobileMenu}
+                  className={cn(
+                    "px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                    location.pathname === "/"
+                      ? "bg-muted text-foreground"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  )}
                 >
                   Home
                 </Link>
-                <Link
-                  to="/movies"
-                  className="block hover:text-gray-600"
-                  onClick={closeMobileMenu}
-                >
-                  Movies
-                </Link>
-                <Link
-                  to="/shows"
-                  className="block hover:text-gray-600"
-                  onClick={closeMobileMenu}
-                >
-                  TV Shows
-                </Link>
-                <Link
-                  to="/search"
-                  className="block hover:text-gray-600"
-                  onClick={closeMobileMenu}
-                >
-                  Search
-                </Link>
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    to={link.href}
+                    onClick={closeMobileMenu}
+                    className={cn(
+                      "px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                      isActiveLink(link.href)
+                        ? "bg-muted text-foreground"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    )}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+
+                <div className="border-t border-border my-3" />
 
                 {user ? (
                   <>
+                    <div className="flex items-center gap-3 px-3 py-2">
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={profilePath ?? undefined} />
+                        <AvatarFallback className="bg-muted text-sm">
+                          {user.email?.charAt(0).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className="text-sm truncate">{user.email}</span>
+                    </div>
                     <Link
                       to="/watchlist"
-                      className="block hover:text-gray-600"
                       onClick={closeMobileMenu}
+                      className="flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted"
                     >
+                      <Bookmark className="h-4 w-4" />
                       Watchlist
                     </Link>
                     <button
-                      onClick={handleLogout}
-                      className="mt-4 w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition"
+                      onClick={() => {
+                        handleLogout();
+                        closeMobileMenu();
+                      }}
+                      className="flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-destructive hover:bg-destructive/10 text-left"
                     >
-                      Logout
+                      <LogOut className="h-4 w-4" />
+                      Log out
                     </button>
                   </>
                 ) : (
-                  <button
-                    className="mt-4 w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition"
+                  <Button
+                    className="mt-2"
                     onClick={() => {
                       navigate("/login");
-                      setMenuOpen(false);
+                      closeMobileMenu();
                     }}
                   >
-                    Login
-                  </button>
+                    Sign in
+                  </Button>
                 )}
               </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </div>
     </nav>
   );
 };

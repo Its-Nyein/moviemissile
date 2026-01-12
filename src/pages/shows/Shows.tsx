@@ -1,72 +1,97 @@
+import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import { fetchTvSeriesDiscovers } from "../../services/fetcher";
-import MovieCard from "../../components/MovieCard";
 import Pagination from "../../UI/Pagination";
+import MovieCard from "../../components/MovieCard";
+import { fetchTvSeriesDiscovers } from "../../services/fetcher";
 import type { Movie, SortBy } from "../../types";
 
 const Shows = () => {
   const [tvShows, setTvShows] = useState<Movie[]>([]);
   const [pages, setPages] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [sortBy] = useState<SortBy>("popularity.desc");
+  const [sortBy, setSortBy] = useState<SortBy>("popularity.desc");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setIsLoading(true);
     fetchTvSeriesDiscovers(pages, sortBy)
       .then((res) => {
         setTvShows(res?.results || []);
         setTotalPages(res?.total_pages || 1);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.log(error))
+      .finally(() => setIsLoading(false));
   }, [pages, sortBy]);
 
-  if (tvShows.length === 0) {
-    return (
-      <div className="container mx-auto max-w-7xl px-4 my-5">
-        <h2 className="font-semibold uppercase text-[#353535] opacity-80">
-          Discover TV Shows
-        </h2>
-        <p className="text-center mt-4 text-gray-500">
-          No TV shows available on this page.
-        </p>
-      </div>
-    );
-  }
+  const handleSortChange = (newSortBy: SortBy) => {
+    setSortBy(newSortBy);
+    setPages(1);
+  };
 
   return (
-    <div className="container mx-auto max-w-7xl px-4 my-5">
-      <div className="flex gap-2 items-center mb-10">
-        <h2 className="font-semibold uppercase text-[#353535] opacity-80">
-          Discover TV Shows
-        </h2>
+    <div className="container mx-auto max-w-7xl px-4 py-8">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <h1 className="text-2xl font-semibold text-foreground">
+          TV Shows
+        </h1>
 
-        <select
-          className="p-2 border border-[#01b4e4] focus:outline-none rounded text-[#353535]"
-          value={sortBy}
-          onChange={(e) => {
-            e.preventDefault();
-            setPages(1);
-          }}
-        >
-          <option value="popularity.desc">Popular</option>
-          <option value="vote_average.desc&vote_count.gte=1000">
+        {/* Sort Toggle */}
+        <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
+          <button
+            onClick={() => handleSortChange("popularity.desc")}
+            className={cn(
+              "px-4 py-1.5 text-sm font-medium rounded-md transition-all",
+              sortBy === "popularity.desc"
+                ? "bg-background text-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            Popular
+          </button>
+          <button
+            onClick={() => handleSortChange("vote_average.desc&vote_count.gte=1000")}
+            className={cn(
+              "px-4 py-1.5 text-sm font-medium rounded-md transition-all",
+              sortBy === "vote_average.desc&vote_count.gte=1000"
+                ? "bg-background text-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground"
+            )}
+          >
             Top Rated
-          </option>
-        </select>
+          </button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-4 align-middle my-8">
-        {tvShows.map((movie) => (
-          <MovieCard key={movie.id} item={movie} type="movie" />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          {Array.from({ length: 20 }).map((_, i) => (
+            <div key={i} className="space-y-2">
+              <div className="aspect-[2/3] w-full rounded-lg bg-muted animate-pulse" />
+              <div className="h-4 w-3/4 rounded bg-muted animate-pulse" />
+              <div className="h-3 w-1/2 rounded bg-muted animate-pulse" />
+            </div>
+          ))}
+        </div>
+      ) : tvShows.length === 0 ? (
+        <div className="text-center py-20">
+          <p className="text-muted-foreground">No TV shows available.</p>
+        </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 mb-8">
+            {tvShows.map((show) => (
+              <MovieCard key={show.id} item={show} type="tv" />
+            ))}
+          </div>
 
-      {tvShows.length > 0 && (
-        <Pagination
-          onPageChange={setPages}
-          totalCount={totalPages}
-          currentPage={pages}
-          pageSize={20}
-        />
+          <Pagination
+            onPageChange={setPages}
+            totalCount={totalPages}
+            currentPage={pages}
+            pageSize={20}
+          />
+        </>
       )}
     </div>
   );

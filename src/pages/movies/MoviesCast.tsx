@@ -1,17 +1,24 @@
+import { ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { formatNumber, generatePoster } from "../../helpers/helpers";
+import type {
+  CastMember,
+  CrewMember,
+  MediaType,
+  MovieDetails,
+} from "../../types";
 import MoviesCastsItem from "./MoviesCastsItem";
-import { FaAnglesRight } from "react-icons/fa6";
-import type { CastMember, CrewMember, MovieDetails } from "../../types";
 
 const MoviesCast = ({
   casts,
   crews,
   movie,
+  mediaType,
 }: {
   casts: CastMember[];
   crews: CrewMember[];
   movie: MovieDetails;
+  mediaType: MediaType;
 }) => {
   const [visibleCasts, setVisibleCasts] = useState(9);
 
@@ -26,82 +33,79 @@ const MoviesCast = ({
 
   const directors = crews?.filter((crew) => crew.job === "Director");
   const budget =
-    movie?.budget != null &&
-    movie?.budget !== 0 &&
-    movie?.media_type === "movie"
+    movie?.budget != null && movie?.budget !== 0 && mediaType === "movie"
       ? "$" + formatNumber(movie.budget)
       : "-";
 
   const revenue =
-    movie?.revenue != null &&
-    movie?.revenue !== 0 &&
-    movie?.media_type === "movie"
+    movie?.revenue != null && movie?.revenue !== 0 && mediaType === "movie"
       ? "$" + formatNumber(movie.revenue)
       : "-";
 
   return (
-    <div className="container mx-auto max-w-7xl grid grid-cols-12 px-4 my-10">
+    <div className="container mx-auto max-w-7xl grid grid-cols-12 px-4 my-5 gap-5">
       <div className="col-span-12 md:col-span-8 lg:col-span-9">
-        <h2 className="text-lg font-semibold text-[#353535] mb-3">Casts</h2>
-        <div className="flex overflow-x-scroll overflow-y-hidden gap-3 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-white dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
+        <h2 className="text-lg font-semibold text-foreground mb-3">Cast</h2>
+        <div className="flex overflow-x-auto gap-3 pb-2">
           {casts?.slice(0, visibleCasts).map((cast) => (
-            <div
-              key={cast.id}
-              className="w-36 min-w-[140px] min-h-[200px] flex-shrink-0"
-            >
+            <div key={cast.id} className="w-36 min-w-[140px] flex-shrink-0">
               <MoviesCastsItem cast={cast} />
             </div>
           ))}
           {remainingCasts > 0 && (
-            <div className="mt-4 w-36 min-w-[140px]">
-              <p
-                className="flex mt-[100px] gap-3 cursor-pointer font-semibold text-[#353535] hover:text-gray-400 items-center"
+            <div className="w-36 min-w-[140px] flex items-center justify-center">
+              <button
+                className="flex flex-col items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
                 onClick={loadMore}
               >
-                View All{" "}
-                <span className="animate-slideRight">
-                  <FaAnglesRight />
-                </span>
-              </p>
+                <ChevronRight className="h-6 w-6" />
+                <span className="text-sm">View More</span>
+              </button>
             </div>
           )}
         </div>
       </div>
 
-      <div className="col-span-12 md:col-span-4 lg:col-span-3 md:ml-4">
-        <div className="mb-4">
-          <p className="text-lg font-semibold text-[#353535] mb-3">Directors</p>
-          {directors?.slice(0, 3).map((director) => (
-            <div key={director.id} className="flex gap-2 mb-2">
-              <img
-                src={generatePoster(director.profile_path || "")}
-                alt="Dire Profile"
-                className="object-cover w-auto h-12 rounded-lg"
-              />
-              <span className="mt-4">{director?.name}</span>
+      <div className="col-span-12 md:col-span-4 lg:col-span-3">
+        {directors && directors.length > 0 && (
+          <div className="mb-4">
+            <h3 className="text-lg font-semibold text-foreground mb-3">
+              Directors
+            </h3>
+            <div className="space-y-2">
+              {directors?.slice(0, 3).map((director) => (
+                <div key={director.id} className="flex items-center gap-3">
+                  <img
+                    src={generatePoster(director.profile_path || "")}
+                    alt={director.name}
+                    className="w-10 h-10 object-cover rounded-full"
+                  />
+                  <span className="text-foreground">{director?.name}</span>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-
-        <div className="mt-3 grid grid-cols-12">
-          <div className="col-span-4">
-            <span className="font-bold">Status</span>
           </div>
-          <div className="col-span-8">{movie.status}</div>
-        </div>
+        )}
 
-        <div className="mt-3 grid grid-cols-12">
-          <div className="col-span-4">
-            <span className="font-bold">Budget</span>
+        <div className="space-y-3">
+          <div className="flex justify-between">
+            <h4 className="font-semibold text-foreground">Status</h4>
+            <p className="text-muted-foreground">{movie.status}</p>
           </div>
-          <div className="col-span-8">{budget}</div>
-        </div>
 
-        <div className="mt-3 grid grid-cols-12">
-          <div className="col-span-4">
-            <span className="font-bold">Revenue</span>
-          </div>
-          <div className="col-span-8">{revenue}</div>
+          {mediaType === "movie" && (
+            <>
+              <div className="flex justify-between">
+                <h4 className="font-semibold text-foreground">Budget</h4>
+                <p className="text-muted-foreground">{budget}</p>
+              </div>
+
+              <div className="flex justify-between">
+                <h4 className="font-semibold text-foreground">Revenue</h4>
+                <p className="text-muted-foreground">{revenue}</p>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

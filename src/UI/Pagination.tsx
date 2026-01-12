@@ -1,5 +1,6 @@
+import { cn } from "@/lib/utils";
+import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
 import { usePagination } from "../hooks/use-pagination";
-import styles from "./Pagination.module.css";
 import type { PaginationProps } from "../types";
 
 const Pagination = ({
@@ -16,7 +17,6 @@ const Pagination = ({
     siblingCount: 1,
   });
 
-  // If there are fewer than 2 items in the pagination range, don't render pagination
   if (currentPage === 0 || !paginationRange || paginationRange.length < 2) {
     return null;
   }
@@ -34,52 +34,74 @@ const Pagination = ({
     }
   };
 
+  const lastPage = paginationRange[paginationRange.length - 1];
+  const isFirstPage = currentPage === 1;
+  const isLastPage = lastPage === currentPage;
+
   return (
-    <ul className={`${styles["pagination-container"]} ${className}`}>
-      <li
-        className={`${styles["pagination-item"]} ${
-          currentPage === 1 && styles["disabled"]
-        }`}
+    <nav
+      className={cn("flex items-center justify-center gap-1", className)}
+      aria-label="Pagination"
+    >
+      <button
         onClick={onPrevious}
+        disabled={isFirstPage}
+        className={cn(
+          "inline-flex h-9 w-9 items-center justify-center rounded-lg",
+          "text-muted-foreground transition-colors",
+          "hover:bg-accent hover:text-accent-foreground",
+          "disabled:pointer-events-none disabled:opacity-50"
+        )}
+        aria-label="Go to previous page"
       >
-        <div className={`${styles.arrow} ${styles.left}`} />
-      </li>
+        <ChevronLeft className="h-4 w-4" />
+      </button>
+
       {paginationRange.map((pageNumber, index) => {
         if (pageNumber === "DOTS") {
           return (
-            <li
+            <span
               key={`dots-${index}`}
-              className={`${styles["pagination-item"]} ${styles.dots}`}
+              className="flex h-9 w-9 items-center justify-center"
             >
-              &#8230;
-            </li>
+              <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+            </span>
           );
         }
 
         return (
-          <li
+          <button
             key={pageNumber}
-            className={`${styles["pagination-item"]} ${
-              pageNumber === currentPage && styles["selected"]
-            }`}
             onClick={() =>
               typeof pageNumber === "number" && onPageChange(pageNumber)
             }
+            className={cn(
+              "inline-flex h-9 w-9 items-center justify-center rounded-lg text-sm font-medium transition-colors",
+              pageNumber === currentPage
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+            )}
+            aria-current={pageNumber === currentPage ? "page" : undefined}
           >
             {pageNumber}
-          </li>
+          </button>
         );
       })}
-      <li
-        className={`${styles["pagination-item"]} ${
-          paginationRange[paginationRange.length - 1] === currentPage &&
-          styles["disabled"]
-        }`}
+
+      <button
         onClick={onNext}
+        disabled={isLastPage}
+        className={cn(
+          "inline-flex h-9 w-9 items-center justify-center rounded-lg",
+          "text-muted-foreground transition-colors",
+          "hover:bg-accent hover:text-accent-foreground",
+          "disabled:pointer-events-none disabled:opacity-50"
+        )}
+        aria-label="Go to next page"
       >
-        <div className={`${styles.arrow} ${styles.right}`} />
-      </li>
-    </ul>
+        <ChevronRight className="h-4 w-4" />
+      </button>
+    </nav>
   );
 };
 

@@ -1,19 +1,21 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
-import App from "./App";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Toaster } from "sonner";
+import App from "./App";
+import ProtectedRoute from "./components/routes/ProtectedRoute";
+import { ThemeProvider } from "./components/theme-provider";
+import { AuthProvider } from "./context/authProvider";
+import "./index.css";
+import AuthForm from "./pages/auth/AuthForm";
+import DetailsPage from "./pages/DetailsPage";
 import Home from "./pages/Home";
 import Movies from "./pages/movies/Movies";
-import Shows from "./pages/shows/Shows";
-import Search from "./pages/search/Search";
-import DetailsPage from "./pages/DetailsPage";
-import AuthForm from "./pages/auth/AuthForm";
-import { AuthProvider } from "./context/authProvider";
-import ProtectedRoute from "./components/routes/ProtectedRoute";
-import Watchlist from "./pages/Watchlist";
 import NotFound from "./pages/NotFound";
 import { PersonDetails } from "./pages/person/PersonDetails";
+import Search from "./pages/search/Search";
+import Shows from "./pages/shows/Shows";
+import Watchlist from "./pages/Watchlist";
 
 const router = createBrowserRouter([
   {
@@ -66,8 +68,11 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
-  </StrictMode>,
+    <ThemeProvider defaultTheme="light" storageKey="moviemissile-theme">
+      <AuthProvider>
+        <RouterProvider router={router} />
+        <Toaster richColors position="top-right" />
+      </AuthProvider>
+    </ThemeProvider>
+  </StrictMode>
 );

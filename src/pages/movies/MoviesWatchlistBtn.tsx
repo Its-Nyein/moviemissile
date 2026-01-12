@@ -1,10 +1,11 @@
+import { Button } from "@/components/ui/button";
+import { BookmarkMinus, BookmarkPlus, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { CiBookmarkMinus, CiBookmarkPlus } from "react-icons/ci";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { useAuth } from "../../context/useAuth";
 import { useFirestore } from "../../services/firestore";
-import { useNavigate } from "react-router-dom";
-import Toast from "../../UI/Toast";
-import type { MovieDetails, MediaType } from "../../types";
+import type { MediaType, MovieDetails } from "../../types";
 
 interface MoviesWatchlistBtnProps {
   details: MovieDetails;
@@ -18,9 +19,8 @@ const MoviesWatchlistBtn = ({ details, type }: MoviesWatchlistBtnProps) => {
     useFirestore();
 
   const [isInWatchlist, setIsInWatchlist] = useState<boolean | null>(null);
-  const [toastMessage, setToastMessage] = useState("");
-  const [toastType, setToastType] = useState("info");
   const [isWatchlistLoading, setIsWatchlistLoading] = useState(true);
+  const [isActionLoading, setIsActionLoading] = useState(false);
 
   useEffect(() => {
     if (!user?.uid || !details?.id) {
@@ -33,7 +33,7 @@ const MoviesWatchlistBtn = ({ details, type }: MoviesWatchlistBtnProps) => {
         try {
           const exists = await checkIsInWatchlist(
             user?.uid,
-            details.id?.toString(),
+            details.id?.toString()
           );
           setIsInWatchlist(exists);
         } catch (error) {
@@ -45,11 +45,6 @@ const MoviesWatchlistBtn = ({ details, type }: MoviesWatchlistBtnProps) => {
       checkWatchlistStatus();
     }
   }, [user?.uid, details?.id, checkIsInWatchlist]);
-
-  const showToast = (message: string, type: string) => {
-    setToastMessage(message);
-    setToastType(type);
-  };
 
   const handleOnSaveWatchlist = async () => {
     if (!user) {
@@ -68,18 +63,20 @@ const MoviesWatchlistBtn = ({ details, type }: MoviesWatchlistBtnProps) => {
     };
 
     const dataId = details?.id?.toString();
+    setIsActionLoading(true);
     try {
       await addToWatchlist(user.uid, dataId, data);
       setIsInWatchlist(true);
-      showToast(
+      toast.success(
         isInWatchlist
           ? "Already added to your watchlist"
-          : "Successfully added to your watchlist",
-        "success",
+          : "Added to your watchlist"
       );
     } catch (error) {
       console.error("Error adding to watchlist:", error);
-      showToast("Something went wrong while adding to watchlist", "error");
+      toast.error("Something went wrong while adding to watchlist");
+    } finally {
+      setIsActionLoading(false);
     }
   };
 
@@ -87,63 +84,57 @@ const MoviesWatchlistBtn = ({ details, type }: MoviesWatchlistBtnProps) => {
     if (!user) return;
 
     const dataId = details?.id?.toString();
+    setIsActionLoading(true);
     try {
       await removeFromWatchlist(user.uid, dataId);
       setIsInWatchlist(false);
-      showToast("Successfully removed from your watchlist", "success");
+      toast.success("Removed from your watchlist");
     } catch (error) {
       console.error("Error removing from watchlist:", error);
-      showToast("Something went wrong while removing from watchlist", "error");
+      toast.error("Something went wrong while removing from watchlist");
+    } finally {
+      setIsActionLoading(false);
     }
   };
 
-  if (isWatchlistLoading) {
+  if (isWatchlistLoading || (user && isInWatchlist === null)) {
     return (
-      <div className="text-sm text-[#01b4e4] items-center my-2">
-        Loading ...
-      </div>
-    );
-  }
-
-  if (user && isInWatchlist === null) {
-    return (
-      <div className="text-sm text-[#01b4e4] items-center my-2">
-        Loading ...
+      <div className="flex items-center gap-2 text-sm text-muted-foreground my-2">
+        <Loader2 className="h-4 w-4 animate-spin" />
+        <span>Loading...</span>
       </div>
     );
   }
 
   return (
-    <div>
+    <div className="my-2">
       {isInWatchlist ? (
-        <button
-          className="relative flex gap-1 border border-[#01b4e4] mb-3 p-2 overflow-hidden group"
+        <Button
+          variant="outline"
+          size="sm"
           onClick={handleOnRemoveWatchlist}
+          disabled={isActionLoading}
         >
-          <div className="absolute inset-0 bg-[#01b4e4] -z-10 transform scale-x-0 group-hover:scale-x-100 transition-all duration-300 ease-in-out"></div>
-          <CiBookmarkMinus className="group-hover:text-white" />
-          <span className="group-hover:text-white transition-all duration-300 ease-in-out">
-            Remove from watchlist
-          </span>
-        </button>
+          {isActionLoading ? (
+            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+          ) : (
+            <BookmarkMinus className="h-4 w-4 mr-2" />
+          )}
+          Remove from Watchlist
+        </Button>
       ) : (
-        <button
-          className="relative flex gap-1 border border-[#01b4e4] mb-3 p-2 overflow-hidden group"
+        <Button
+          size="sm"
           onClick={handleOnSaveWatchlist}
+          disabled={isActionLoading}
         >
-          <div className="absolute inset-0 bg-[#01b4e4] -z-10 transform scale-x-0 group-hover:scale-x-100 transition-all duration-300 ease-in-out"></div>
-          <CiBookmarkPlus className="group-hover:text-white" />
-          <span className="group-hover:text-white transition-all duration-300 ease-in-out">
-            Add to watchlist
-          </span>
-        </button>
-      )}
-      {toastMessage && (
-        <Toast
-          message={toastMessage}
-          type={toastType as "success" | "error" | "info"}
-          onClose={() => setToastMessage("")}
-        />
+          {isActionLoading ? (
+            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+          ) : (
+            <BookmarkPlus className="h-4 w-4 mr-2" />
+          )}
+          Add to Watchlist
+        </Button>
       )}
     </div>
   );
