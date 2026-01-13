@@ -174,7 +174,7 @@ const DetailsPage = () => {
             {recommendations?.map((recommendation) => (
               <div
                 key={recommendation.id}
-                className="w-36 min-w-[140px] min-h-[200px] flex-shrink-0"
+                className="w-36 min-w-[140px] min-h-[200px] shrink-0"
               >
                 <MovieCard
                   item={recommendation}

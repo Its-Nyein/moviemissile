@@ -29,7 +29,7 @@ const MovieCard = ({ item, type }: MovieCardProps) => {
       <div className="relative overflow-hidden rounded-lg bg-muted">
         {/* Skeleton loader */}
         {!imageLoaded && (
-          <div className="aspect-[2/3] w-full bg-muted animate-pulse" />
+          <div className="aspect-2/3 w-full bg-muted animate-pulse" />
         )}
 
         {/* Poster image */}
@@ -38,7 +38,7 @@ const MovieCard = ({ item, type }: MovieCardProps) => {
           src={posterUrl}
           alt={item.title || item.name}
           className={cn(
-            "aspect-[2/3] w-full object-cover transition-transform duration-300 group-hover:scale-105",
+            "aspect-2/3 w-full object-cover transition-transform duration-300 group-hover:scale-105",
             imageLoaded ? "block" : "hidden"
           )}
           onLoad={() => setImageLoaded(true)}

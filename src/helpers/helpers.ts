@@ -1,6 +1,6 @@
+import profileFallback from "../assets/fallback-img.png";
 import fallback from "../assets/poster-fallback.jpg";
 import { imagePathOriginal } from "../services/fetcher";
-import profileFallback from "../assets/fallback-img.png";
 
 const months = [
   "Jan",
@@ -26,7 +26,7 @@ export const generatePoster = (path: string) => {
 };
 
 export const generateProfile = (path: string) => {
-  return path !== null ? `${imagePathOriginal}/${path}` : profileFallback;
+  return path ? `${imagePathOriginal}/${path}` : profileFallback;
 };
 
 export const generateRating = (rating: number) => {
