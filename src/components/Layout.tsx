@@ -12,14 +12,14 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="bg-background flex min-h-screen items-center justify-center">
         <LoadingSpinner size="lg" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="bg-background flex min-h-screen flex-col">
       <Navbar />
       <main className="flex-1">{children}</main>
       {!isSearchPage && <Footer />}

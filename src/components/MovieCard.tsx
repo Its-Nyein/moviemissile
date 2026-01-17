@@ -26,10 +26,10 @@ const MovieCard = ({ item, type }: MovieCardProps) => {
 
   return (
     <Link to={`/${type}/${item?.id}`} className="group block">
-      <div className="relative overflow-hidden rounded-lg bg-muted">
+      <div className="bg-muted relative overflow-hidden rounded-lg">
         {/* Skeleton loader */}
         {!imageLoaded && (
-          <div className="aspect-2/3 w-full bg-muted animate-pulse" />
+          <div className="bg-muted aspect-2/3 w-full animate-pulse" />
         )}
 
         {/* Poster image */}
@@ -46,21 +46,19 @@ const MovieCard = ({ item, type }: MovieCardProps) => {
 
         {/* Rating badge */}
         {rating && rating !== "0.0" && (
-          <div className="absolute top-2 left-2 bg-black/70 rounded px-1.5 py-0.5 flex items-center gap-1">
+          <div className="absolute top-2 left-2 flex items-center gap-1 rounded bg-black/70 px-1.5 py-0.5">
             <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-            <span className="text-white text-xs font-medium">{rating}</span>
+            <span className="text-xs font-medium text-white">{rating}</span>
           </div>
         )}
       </div>
 
       {/* Info below card */}
       <div className="mt-2">
-        <p className="font-medium text-foreground line-clamp-1 text-sm">
+        <p className="text-foreground line-clamp-1 text-sm font-medium">
           {item.title || item.name}
         </p>
-        <p className="text-xs text-muted-foreground mt-0.5">
-          {releasedYear}
-        </p>
+        <p className="text-muted-foreground mt-0.5 text-xs">{releasedYear}</p>
       </div>
     </Link>
   );

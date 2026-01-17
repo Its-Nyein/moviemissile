@@ -99,7 +99,7 @@ const MoviesWatchlistBtn = ({ details, type }: MoviesWatchlistBtnProps) => {
 
   if (isWatchlistLoading || (user && isInWatchlist === null)) {
     return (
-      <div className="flex items-center gap-2 text-sm text-muted-foreground my-2">
+      <div className="text-muted-foreground my-2 flex items-center gap-2 text-sm">
         <Loader2 className="h-4 w-4 animate-spin" />
         <span>Loading...</span>
       </div>
@@ -116,9 +116,9 @@ const MoviesWatchlistBtn = ({ details, type }: MoviesWatchlistBtnProps) => {
           disabled={isActionLoading}
         >
           {isActionLoading ? (
-            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           ) : (
-            <BookmarkMinus className="h-4 w-4 mr-2" />
+            <BookmarkMinus className="mr-2 h-4 w-4" />
           )}
           Remove from Watchlist
         </Button>
@@ -129,9 +129,9 @@ const MoviesWatchlistBtn = ({ details, type }: MoviesWatchlistBtnProps) => {
           disabled={isActionLoading}
         >
           {isActionLoading ? (
-            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           ) : (
-            <BookmarkPlus className="h-4 w-4 mr-2" />
+            <BookmarkPlus className="mr-2 h-4 w-4" />
           )}
           Add to Watchlist
         </Button>

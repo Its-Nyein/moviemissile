@@ -4,7 +4,7 @@ import { generatePoster } from "../../helpers/helpers";
 import type { CastMember } from "../../types";
 
 const ImgSkeletonLoader = () => (
-  <div className="h-44 w-full rounded-t-lg bg-muted animate-pulse" />
+  <div className="bg-muted h-44 w-full animate-pulse rounded-t-lg" />
 );
 
 interface MoviesCastsItemProps {
@@ -17,14 +17,14 @@ const MoviesCastsItem = ({ cast }: MoviesCastsItemProps) => {
   return (
     <Link
       to={`/person/${cast.id}`}
-      className="block bg-card rounded-lg overflow-hidden border border-border shadow-sm hover:shadow-md transition-shadow"
+      className="bg-card border-border block overflow-hidden rounded-lg border shadow-sm transition-shadow hover:shadow-md"
     >
-      <div className="h-44 overflow-hidden relative">
+      <div className="relative h-44 overflow-hidden">
         {!imageLoaded && <ImgSkeletonLoader />}
         <img
           src={generatePoster(cast?.profile_path || "")}
           alt={cast?.name}
-          className={`object-cover w-full h-full ${
+          className={`h-full w-full object-cover ${
             imageLoaded ? "opacity-100" : "opacity-0"
           }`}
           onLoad={() => setImageLoaded(true)}
@@ -32,10 +32,10 @@ const MoviesCastsItem = ({ cast }: MoviesCastsItemProps) => {
       </div>
 
       <div className="p-2">
-        <p className="font-semibold text-sm text-foreground truncate">
+        <p className="text-foreground truncate text-sm font-semibold">
           {cast.name}
         </p>
-        <p className="text-xs text-muted-foreground truncate">
+        <p className="text-muted-foreground truncate text-xs">
           {cast.character}
         </p>
       </div>

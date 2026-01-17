@@ -43,19 +43,19 @@ const MoviesCast = ({
       : "-";
 
   return (
-    <div className="container mx-auto max-w-7xl grid grid-cols-12 px-4 my-5 gap-5">
+    <div className="container mx-auto my-5 grid max-w-7xl grid-cols-12 gap-5 px-4">
       <div className="col-span-12 md:col-span-8 lg:col-span-9">
-        <h2 className="text-lg font-semibold text-foreground mb-3">Cast</h2>
-        <div className="flex overflow-x-auto gap-3 pb-2">
+        <h2 className="text-foreground mb-3 text-lg font-semibold">Cast</h2>
+        <div className="flex gap-3 overflow-x-auto pb-2">
           {casts?.slice(0, visibleCasts).map((cast) => (
             <div key={cast.id} className="w-36 min-w-[140px] flex-shrink-0">
               <MoviesCastsItem cast={cast} />
             </div>
           ))}
           {remainingCasts > 0 && (
-            <div className="w-36 min-w-[140px] flex items-center justify-center">
+            <div className="flex w-36 min-w-[140px] items-center justify-center">
               <button
-                className="flex flex-col items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+                className="text-muted-foreground hover:text-foreground flex flex-col items-center gap-2 transition-colors"
                 onClick={loadMore}
               >
                 <ChevronRight className="h-6 w-6" />
@@ -69,7 +69,7 @@ const MoviesCast = ({
       <div className="col-span-12 md:col-span-4 lg:col-span-3">
         {directors && directors.length > 0 && (
           <div className="mb-4">
-            <h3 className="text-lg font-semibold text-foreground mb-3">
+            <h3 className="text-foreground mb-3 text-lg font-semibold">
               Directors
             </h3>
             <div className="space-y-2">
@@ -78,7 +78,7 @@ const MoviesCast = ({
                   <img
                     src={generatePoster(director.profile_path || "")}
                     alt={director.name}
-                    className="w-10 h-10 object-cover rounded-full"
+                    className="h-10 w-10 rounded-full object-cover"
                   />
                   <span className="text-foreground">{director?.name}</span>
                 </div>
@@ -89,19 +89,19 @@ const MoviesCast = ({
 
         <div className="space-y-3">
           <div className="flex justify-between">
-            <h4 className="font-semibold text-foreground">Status</h4>
+            <h4 className="text-foreground font-semibold">Status</h4>
             <p className="text-muted-foreground">{movie.status}</p>
           </div>
 
           {mediaType === "movie" && (
             <>
               <div className="flex justify-between">
-                <h4 className="font-semibold text-foreground">Budget</h4>
+                <h4 className="text-foreground font-semibold">Budget</h4>
                 <p className="text-muted-foreground">{budget}</p>
               </div>
 
               <div className="flex justify-between">
-                <h4 className="font-semibold text-foreground">Revenue</h4>
+                <h4 className="text-foreground font-semibold">Revenue</h4>
                 <p className="text-muted-foreground">{revenue}</p>
               </div>
             </>

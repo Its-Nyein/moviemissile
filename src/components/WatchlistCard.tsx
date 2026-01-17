@@ -21,7 +21,7 @@ const WatchlistCard = ({
       : item.release_date?.split("-")[0] || "unknown";
 
   return (
-    <div className="group glass rounded-xl overflow-hidden border border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5">
+    <div className="group glass border-border/50 hover:border-primary/30 hover:shadow-primary/5 overflow-hidden rounded-xl border transition-all duration-300 hover:shadow-lg">
       <div className="flex">
         <Link
           to={`/${type}/${item?.id}`}
@@ -31,39 +31,39 @@ const WatchlistCard = ({
             key={item.id}
             src={posterUrl}
             alt={item.title || item.name}
-            className="w-32 sm:w-40 h-[180px] object-cover transition-transform duration-300 group-hover:scale-105"
+            className="h-[180px] w-32 object-cover transition-transform duration-300 group-hover:scale-105 sm:w-40"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-            <div className="w-12 h-12 rounded-full gradient-bg flex items-center justify-center transform scale-0 group-hover:scale-100 transition-transform duration-300">
+          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <div className="gradient-bg flex h-12 w-12 scale-0 transform items-center justify-center rounded-full transition-transform duration-300 group-hover:scale-100">
               <Play className="h-5 w-5 text-white" fill="white" />
             </div>
           </div>
         </Link>
 
-        <div className="flex flex-col gap-2 p-4 flex-1 min-w-0">
+        <div className="flex min-w-0 flex-1 flex-col gap-2 p-4">
           <Link to={`/${type}/${item?.id}`} className="block">
-            <h2 className="font-semibold text-lg text-foreground hover:text-primary transition-colors line-clamp-1">
+            <h2 className="text-foreground hover:text-primary line-clamp-1 text-lg font-semibold transition-colors">
               {item?.title || item?.name}
             </h2>
           </Link>
 
           <div className="flex items-center gap-3 text-sm">
-            <span className="flex items-center gap-1.5 text-muted-foreground">
+            <span className="text-muted-foreground flex items-center gap-1.5">
               <Calendar className="h-3.5 w-3.5" />
               {releasedYear}
             </span>
-            <span className="flex items-center gap-1 bg-black/40 backdrop-blur-sm rounded-lg px-2 py-0.5">
+            <span className="flex items-center gap-1 rounded-lg bg-black/40 px-2 py-0.5 backdrop-blur-sm">
               <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
-              <span className="font-medium text-foreground">
+              <span className="text-foreground font-medium">
                 {item?.vote_average?.toFixed(1)}
               </span>
             </span>
-            <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary capitalize">
+            <span className="bg-primary/10 text-primary rounded-full px-2 py-0.5 text-xs font-medium capitalize">
               {type === "tv" ? "TV Show" : "Movie"}
             </span>
           </div>
 
-          <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3 mt-1">
+          <p className="text-muted-foreground mt-1 line-clamp-3 text-sm leading-relaxed">
             {item?.overview || "No overview available."}
           </p>
         </div>

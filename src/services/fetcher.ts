@@ -21,10 +21,10 @@ const baseUrl = "https://api.themoviedb.org/3";
 const apiKey = import.meta.env.VITE_API_KEY;
 
 export const fetchAllMovies = async (
-  timeWindow: TimeWindow = "day",
+  timeWindow: TimeWindow = "day"
 ): Promise<Movie[]> => {
   const { data } = await axios.get<TrendingResponse>(
-    `${baseUrl}/trending/all/${timeWindow}?api_key=${apiKey}`,
+    `${baseUrl}/trending/all/${timeWindow}?api_key=${apiKey}`
   );
 
   return data?.results || [];
@@ -32,10 +32,10 @@ export const fetchAllMovies = async (
 
 export const fetchMoviesDetails = async (
   type: MediaType,
-  id: number,
+  id: number
 ): Promise<MovieDetails> => {
   const res = await axios.get<MovieDetails>(
-    `${baseUrl}/${type}/${id}?api_key=${apiKey}`,
+    `${baseUrl}/${type}/${id}?api_key=${apiKey}`
   );
 
   return res?.data;
@@ -43,10 +43,10 @@ export const fetchMoviesDetails = async (
 
 export const fetchMoviesCast = async (
   type: MediaType,
-  id: number,
+  id: number
 ): Promise<Credits> => {
   const res = await axios.get<Credits>(
-    `${baseUrl}/${type}/${id}/credits?api_key=${apiKey}`,
+    `${baseUrl}/${type}/${id}/credits?api_key=${apiKey}`
   );
 
   return res?.data;
@@ -54,10 +54,10 @@ export const fetchMoviesCast = async (
 
 export const fetchMoviesReviews = async (
   type: MediaType,
-  id: number,
+  id: number
 ): Promise<Review[]> => {
   const res = await axios.get<{ results: Review[] }>(
-    `${baseUrl}/${type}/${id}/reviews?api_key=${apiKey}`,
+    `${baseUrl}/${type}/${id}/reviews?api_key=${apiKey}`
   );
 
   return res?.data?.results || [];
@@ -65,10 +65,10 @@ export const fetchMoviesReviews = async (
 
 export const fetchMoviesRecommendations = async (
   type: MediaType,
-  id: number,
+  id: number
 ): Promise<Movie[]> => {
   const res = await axios.get<TrendingResponse>(
-    `${baseUrl}/${type}/${id}/recommendations?api_key=${apiKey}`,
+    `${baseUrl}/${type}/${id}/recommendations?api_key=${apiKey}`
   );
 
   return res.data?.results || [];
@@ -76,10 +76,10 @@ export const fetchMoviesRecommendations = async (
 
 export const fetchMoviesDiscovers = async (
   page: number,
-  sortBy: SortBy,
+  sortBy: SortBy
 ): Promise<DiscoverResponse> => {
   const res = await axios.get<DiscoverResponse>(
-    `${baseUrl}/discover/movie?api_key=${apiKey}&page=${page}&sort_by=${sortBy}`,
+    `${baseUrl}/discover/movie?api_key=${apiKey}&page=${page}&sort_by=${sortBy}`
   );
 
   return res?.data;
@@ -87,10 +87,10 @@ export const fetchMoviesDiscovers = async (
 
 export const fetchTvSeriesDiscovers = async (
   page: number,
-  sortBy: SortBy,
+  sortBy: SortBy
 ): Promise<DiscoverResponse> => {
   const res = await axios.get<DiscoverResponse>(
-    `${baseUrl}/discover/tv?api_key=${apiKey}&page=${page}&sort_by=${sortBy}`,
+    `${baseUrl}/discover/tv?api_key=${apiKey}&page=${page}&sort_by=${sortBy}`
   );
 
   return res?.data;
@@ -98,10 +98,10 @@ export const fetchTvSeriesDiscovers = async (
 
 export const fetchSearchMovies = async (
   q: string,
-  page: number,
+  page: number
 ): Promise<SearchResponse> => {
   const res = await axios.get<SearchResponse>(
-    `${baseUrl}/search/multi?api_key=${apiKey}&query=${q}&page=${page}`,
+    `${baseUrl}/search/multi?api_key=${apiKey}&query=${q}&page=${page}`
   );
 
   return res?.data;
@@ -109,16 +109,16 @@ export const fetchSearchMovies = async (
 
 export const fetchPersonDetails = async (id: number): Promise<Person> => {
   const res = await axios.get<Person>(
-    `${baseUrl}/person/${id}?api_key=${apiKey}`,
+    `${baseUrl}/person/${id}?api_key=${apiKey}`
   );
   return res?.data;
 };
 
 export const fetchPersonMovieCredits = async (
-  id: number,
+  id: number
 ): Promise<PersonMovieCredits> => {
   const res = await axios.get<PersonMovieCredits>(
-    `${baseUrl}/person/${id}/movie_credits?api_key=${apiKey}`,
+    `${baseUrl}/person/${id}/movie_credits?api_key=${apiKey}`
   );
   return res?.data;
 };

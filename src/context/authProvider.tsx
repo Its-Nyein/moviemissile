@@ -20,14 +20,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   async function signUpWithEmailPassword(
     email: string,
-    password: string,
+    password: string
   ): Promise<void> {
     await createUserWithEmailAndPassword(auth, email, password);
   }
 
   async function loginWithEmailPassword(
     email: string,
-    password: string,
+    password: string
   ): Promise<void> {
     await signInWithEmailAndPassword(auth, email, password);
   }

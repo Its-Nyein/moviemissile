@@ -13,7 +13,7 @@ import {
 export const useFirestore = () => {
   const addDocument = async (
     collectionName: string,
-    data: Record<string, unknown>,
+    data: Record<string, unknown>
   ) => {
     // Add a new document with a generated id.
     const docRef = await addDoc(collection(db, collectionName), data);
@@ -23,7 +23,7 @@ export const useFirestore = () => {
   const addToWatchlist = async (
     userId: string,
     dataId: string,
-    data: Record<string, unknown>,
+    data: Record<string, unknown>
   ) => {
     try {
       if (await checkIsInWatchlist(userId, dataId)) {
@@ -41,7 +41,7 @@ export const useFirestore = () => {
       "users",
       userId?.toString(),
       "watchlist",
-      dataId?.toString(),
+      dataId?.toString()
     );
 
     const docSnap = await getDoc(docRef);
@@ -55,7 +55,7 @@ export const useFirestore = () => {
   const removeFromWatchlist = async (userId: string, dataId: string) => {
     try {
       await deleteDoc(
-        doc(db, "users", userId?.toString(), "watchlist", dataId?.toString()),
+        doc(db, "users", userId?.toString(), "watchlist", dataId?.toString())
       );
     } catch (error) {
       console.log(error);
@@ -64,7 +64,7 @@ export const useFirestore = () => {
 
   const getWatchlistData = useCallback(async (userId: string) => {
     const querySnapshot = await getDocs(
-      collection(db, "users", userId, "watchlist"),
+      collection(db, "users", userId, "watchlist")
     );
 
     const data = querySnapshot.docs.map((doc) => ({

@@ -58,10 +58,10 @@ const AuthForm = () => {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
+    <div className="flex min-h-[80vh] items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         <Card className="glass border-border/50">
-          <CardHeader className="space-y-2 text-center pb-2">
+          <CardHeader className="space-y-2 pb-2 text-center">
             <CardTitle className="text-2xl font-bold">
               {isSignUp ? "Create an account" : "Welcome back"}
             </CardTitle>
@@ -78,7 +78,7 @@ const AuthForm = () => {
                   Email
                 </Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Mail className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
                   <Input
                     id="email"
                     type="email"
@@ -87,7 +87,7 @@ const AuthForm = () => {
                     placeholder="name@example.com"
                     required
                     autoComplete="email"
-                    className="pl-10 h-11 bg-secondary/50 border-0 focus-visible:ring-2 focus-visible:ring-primary"
+                    className="bg-secondary/50 focus-visible:ring-primary h-11 border-0 pl-10 focus-visible:ring-2"
                   />
                 </div>
               </div>
@@ -97,7 +97,7 @@ const AuthForm = () => {
                   Password
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Lock className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
                   <Input
                     id="password"
                     type="password"
@@ -108,14 +108,14 @@ const AuthForm = () => {
                     autoComplete={
                       isSignUp ? "new-password" : "current-password"
                     }
-                    className="pl-10 h-11 bg-secondary/50 border-0 focus-visible:ring-2 focus-visible:ring-primary"
+                    className="bg-secondary/50 focus-visible:ring-primary h-11 border-0 pl-10 focus-visible:ring-2"
                   />
                 </div>
               </div>
 
               <Button
                 type="submit"
-                className="w-full h-11 gradient-bg hover:opacity-90 transition-opacity rounded-xl font-semibold"
+                className="gradient-bg h-11 w-full rounded-xl font-semibold transition-opacity hover:opacity-90"
                 disabled={loading}
               >
                 {loading ? (
@@ -131,13 +131,13 @@ const AuthForm = () => {
               </Button>
             </form>
 
-            <div className="mt-6 text-center text-sm text-muted-foreground">
+            <div className="text-muted-foreground mt-6 text-center text-sm">
               {isSignUp ? (
                 <>
                   Already have an account?{" "}
                   <button
                     onClick={toggleForm}
-                    className="font-semibold text-primary hover:underline"
+                    className="text-primary font-semibold hover:underline"
                   >
                     Sign In
                   </button>
@@ -147,7 +147,7 @@ const AuthForm = () => {
                   Don't have an account?{" "}
                   <button
                     onClick={toggleForm}
-                    className="font-semibold text-primary hover:underline"
+                    className="text-primary font-semibold hover:underline"
                   >
                     Sign Up
                   </button>
@@ -158,8 +158,8 @@ const AuthForm = () => {
             {successMessage && (
               <div
                 className={cn(
-                  "flex items-center gap-2 mt-4 p-4 rounded-xl",
-                  "bg-green-500/10 text-green-500 border border-green-500/20"
+                  "mt-4 flex items-center gap-2 rounded-xl p-4",
+                  "border border-green-500/20 bg-green-500/10 text-green-500"
                 )}
               >
                 <CheckCircle2 className="h-5 w-5" />
@@ -170,8 +170,8 @@ const AuthForm = () => {
             {error && (
               <div
                 className={cn(
-                  "flex items-center gap-2 mt-4 p-4 rounded-xl",
-                  "bg-destructive/10 text-destructive border border-destructive/20"
+                  "mt-4 flex items-center gap-2 rounded-xl p-4",
+                  "bg-destructive/10 text-destructive border-destructive/20 border"
                 )}
               >
                 <AlertCircle className="h-5 w-5" />

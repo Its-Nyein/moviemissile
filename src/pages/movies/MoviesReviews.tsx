@@ -7,8 +7,8 @@ interface MoviesReviewsProps {
 
 const MoviesReviews = ({ reviews }: MoviesReviewsProps) => {
   return (
-    <div className="container mx-auto max-w-7xl px-4 my-5">
-      <h2 className="text-lg font-semibold text-foreground mb-3">Reviews</h2>
+    <div className="container mx-auto my-5 max-w-7xl px-4">
+      <h2 className="text-foreground mb-3 text-lg font-semibold">Reviews</h2>
 
       {reviews?.length === 0 && (
         <p className="text-muted-foreground italic">

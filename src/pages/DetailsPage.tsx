@@ -83,21 +83,21 @@ const DetailsPage = () => {
             <img
               src={posterUrl}
               alt={details?.title || details?.name}
-              className="w-full object-cover rounded-lg shadow"
+              className="w-full rounded-lg object-cover shadow"
             />
           </div>
 
           {/* Details */}
           <div className="col-span-8 md:col-span-9">
             {/* Title */}
-            <div className="flex gap-2 mb-3 items-center">
-              <h4 className="text-lg text-foreground font-bold">{title}</h4>
+            <div className="mb-3 flex items-center gap-2">
+              <h4 className="text-foreground text-lg font-bold">{title}</h4>
               <p className="text-muted-foreground">{releasedYear}</p>
             </div>
 
             {/* Date and Runtime */}
-            <div className="flex flex-col md:flex-row mb-3 gap-2 md:gap-0 text-muted-foreground">
-              <div className="flex gap-2 mr-1 items-center">
+            <div className="text-muted-foreground mb-3 flex flex-col gap-2 md:flex-row md:gap-0">
+              <div className="mr-1 flex items-center gap-2">
                 <span>
                   {releaseDate
                     ? new Date(releaseDate).toLocaleDateString("en-US")
@@ -107,18 +107,18 @@ const DetailsPage = () => {
               </div>
               {type === "movie" && details.runtime && (
                 <div className="flex gap-1">
-                  <div className="hidden md:flex mx-2">*</div>
+                  <div className="mx-2 hidden md:flex">*</div>
                   <div>{minutesToHrs(details.runtime)}</div>
                 </div>
               )}
             </div>
 
             {/* Genres */}
-            <p className="flex mb-3 gap-1 flex-wrap">
+            <p className="mb-3 flex flex-wrap gap-1">
               {details.genres?.map((genre) => (
                 <span
                   key={genre?.id}
-                  className="p-2 border border-border rounded text-sm"
+                  className="border-border rounded border p-2 text-sm"
                 >
                   {genre.name}
                 </span>
@@ -126,9 +126,12 @@ const DetailsPage = () => {
             </p>
 
             {/* Rating */}
-            <p className="flex gap-2 mb-3 items-center">
-              <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
-              <span>User Score - {details.vote_average?.toFixed(1)}/10 ({formatNumber(details.vote_count)})</span>
+            <p className="mb-3 flex items-center gap-2">
+              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+              <span>
+                User Score - {details.vote_average?.toFixed(1)}/10 (
+                {formatNumber(details.vote_count)})
+              </span>
             </p>
 
             {/* Watchlist Button */}
@@ -136,14 +139,16 @@ const DetailsPage = () => {
 
             {/* Tagline */}
             {details.tagline && (
-              <p className="text-muted-foreground text-sm italic mt-2">
+              <p className="text-muted-foreground mt-2 text-sm italic">
                 {details.tagline}
               </p>
             )}
 
             {/* Overview - Desktop */}
             <div className="mt-8 hidden lg:block">
-              <h2 className="text-lg font-bold text-foreground mb-2">Overview</h2>
+              <h2 className="text-foreground mb-2 text-lg font-bold">
+                Overview
+              </h2>
               <span className="text-muted-foreground leading-relaxed">
                 {details.overview}
               </span>
@@ -152,7 +157,7 @@ const DetailsPage = () => {
         </div>
 
         <div className="mt-8 lg:hidden">
-          <h2 className="text-lg font-bold text-foreground mb-2">Overview</h2>
+          <h2 className="text-foreground mb-2 text-lg font-bold">Overview</h2>
           <span className="text-muted-foreground leading-relaxed">
             {details.overview}
           </span>
@@ -160,21 +165,26 @@ const DetailsPage = () => {
       </div>
 
       {casts?.cast && casts.cast.length > 0 && (
-        <MoviesCast casts={casts.cast} crews={casts.crew} movie={details} mediaType={type as MediaType} />
+        <MoviesCast
+          casts={casts.cast}
+          crews={casts.crew}
+          movie={details}
+          mediaType={type as MediaType}
+        />
       )}
 
       {reviews?.length > 0 && <MoviesReviews reviews={reviews} />}
 
       {recommendations?.length > 0 && (
-        <div className="container mx-auto max-w-7xl px-4 my-5">
-          <h2 className="text-lg font-semibold text-foreground mb-3">
+        <div className="container mx-auto my-5 max-w-7xl px-4">
+          <h2 className="text-foreground mb-3 text-lg font-semibold">
             Recommendations
           </h2>
-          <div className="flex overflow-x-auto gap-3 pb-2">
+          <div className="flex gap-3 overflow-x-auto pb-2">
             {recommendations?.map((recommendation) => (
               <div
                 key={recommendation.id}
-                className="w-36 min-w-[140px] min-h-[200px] shrink-0"
+                className="min-h-[200px] w-36 min-w-[140px] shrink-0"
               >
                 <MovieCard
                   item={recommendation}

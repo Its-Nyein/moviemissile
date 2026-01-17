@@ -47,9 +47,9 @@ const Watchlist = () => {
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-8">
-      <div className="flex items-center gap-3 mb-8">
+      <div className="mb-8 flex items-center gap-3">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+          <h1 className="text-foreground text-2xl font-bold md:text-3xl">
             My Watchlist
           </h1>
           <p className="text-muted-foreground text-sm">
@@ -62,17 +62,17 @@ const Watchlist = () => {
 
       {!isLoading && watchlistData?.length === 0 && (
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mb-6">
-            <Bookmark className="h-12 w-12 text-primary/50" />
+          <div className="bg-primary/10 mb-6 flex h-24 w-24 items-center justify-center rounded-full">
+            <Bookmark className="text-primary/50 h-12 w-12" />
           </div>
-          <h3 className="text-xl font-semibold text-foreground mb-3">
+          <h3 className="text-foreground mb-3 text-xl font-semibold">
             Your watchlist is empty
           </h3>
-          <p className="text-muted-foreground max-w-md mb-6">
+          <p className="text-muted-foreground mb-6 max-w-md">
             Start adding movies and TV shows to your watchlist to keep track of
             what you want to watch.
           </p>
-          <Button asChild className="rounded-full gradient-bg hover:opacity-90">
+          <Button asChild className="gradient-bg rounded-full hover:opacity-90">
             <Link to="/movies">Discover Movies</Link>
           </Button>
         </div>

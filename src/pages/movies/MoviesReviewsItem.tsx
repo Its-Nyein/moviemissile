@@ -26,17 +26,17 @@ const MoviesReviewsItem = ({ review }: MoviesReviewsItemProps) => {
   const toggleBtnCaption = showFullContent ? "Show less" : "Show more";
 
   return (
-    <div className="border border-border rounded-lg p-4">
-      <div className="flex gap-3 items-start">
+    <div className="border-border rounded-lg border p-4">
+      <div className="flex items-start gap-3">
         <img
           src={generateProfile(review.author_details?.avatar_path || "")}
           alt={`${review?.author}'s avatar`}
-          className="w-12 h-12 object-cover rounded-full"
+          className="h-12 w-12 rounded-full object-cover"
         />
 
-        <div className="flex-1 min-w-0">
-          <div className="flex flex-wrap items-center gap-2 mb-1">
-            <span className="font-semibold text-foreground">
+        <div className="min-w-0 flex-1">
+          <div className="mb-1 flex flex-wrap items-center gap-2">
+            <span className="text-foreground font-semibold">
               {review?.author}
             </span>
             {review.author_details?.rating && (
@@ -55,12 +55,12 @@ const MoviesReviewsItem = ({ review }: MoviesReviewsItemProps) => {
         </div>
       </div>
 
-      <div className="mt-3 text-muted-foreground text-sm leading-relaxed">
+      <div className="text-muted-foreground mt-3 text-sm leading-relaxed">
         {content}
         {review.content?.length > 400 && (
           <button
             onClick={toggleContentHandler}
-            className="font-medium text-primary hover:underline ml-1"
+            className="text-primary ml-1 font-medium hover:underline"
           >
             {toggleBtnCaption}
           </button>

@@ -31,17 +31,15 @@ const Shows = () => {
   return (
     <div className="container mx-auto max-w-7xl px-4 py-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        <h1 className="text-2xl font-semibold text-foreground">
-          TV Shows
-        </h1>
+      <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+        <h1 className="text-foreground text-2xl font-semibold">TV Shows</h1>
 
         {/* Sort Toggle */}
-        <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
+        <div className="bg-muted flex items-center gap-1 rounded-lg p-1">
           <button
             onClick={() => handleSortChange("popularity.desc")}
             className={cn(
-              "px-4 py-1.5 text-sm font-medium rounded-md transition-all",
+              "rounded-md px-4 py-1.5 text-sm font-medium transition-all",
               sortBy === "popularity.desc"
                 ? "bg-background text-foreground shadow-sm"
                 : "text-muted-foreground hover:text-foreground"
@@ -50,9 +48,11 @@ const Shows = () => {
             Popular
           </button>
           <button
-            onClick={() => handleSortChange("vote_average.desc&vote_count.gte=1000")}
+            onClick={() =>
+              handleSortChange("vote_average.desc&vote_count.gte=1000")
+            }
             className={cn(
-              "px-4 py-1.5 text-sm font-medium rounded-md transition-all",
+              "rounded-md px-4 py-1.5 text-sm font-medium transition-all",
               sortBy === "vote_average.desc&vote_count.gte=1000"
                 ? "bg-background text-foreground shadow-sm"
                 : "text-muted-foreground hover:text-foreground"
@@ -64,22 +64,22 @@ const Shows = () => {
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
           {Array.from({ length: 20 }).map((_, i) => (
             <div key={i} className="space-y-2">
-              <div className="aspect-[2/3] w-full rounded-lg bg-muted animate-pulse" />
-              <div className="h-4 w-3/4 rounded bg-muted animate-pulse" />
-              <div className="h-3 w-1/2 rounded bg-muted animate-pulse" />
+              <div className="bg-muted aspect-[2/3] w-full animate-pulse rounded-lg" />
+              <div className="bg-muted h-4 w-3/4 animate-pulse rounded" />
+              <div className="bg-muted h-3 w-1/2 animate-pulse rounded" />
             </div>
           ))}
         </div>
       ) : tvShows.length === 0 ? (
-        <div className="text-center py-20">
+        <div className="py-20 text-center">
           <p className="text-muted-foreground">No TV shows available.</p>
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 mb-8">
+          <div className="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
             {tvShows.map((show) => (
               <MovieCard key={show.id} item={show} type="tv" />
             ))}
